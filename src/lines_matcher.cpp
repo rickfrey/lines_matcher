@@ -12,6 +12,20 @@ using namespace std;
 
 int main ( int argc, char *argv[] )
 {
+    // 1. Datei öffnen
+    // 2. Objekt Bild1 anlegen
+    // 3. Pose aus Textdatei lesen
+    // 4. Pose über setPose an Bild1 übergeben
+    // 5. folgende Zeilen (Linienpararmeter) in n x 4 - Array laden
+    // 6. Array mit setLinienarray an Bild1 übergeben
+    // 7. Alle Zeilen bis hierhin löschen
+    // 8. So lange wiederholen bis Textdatei leer
+
+
+
+
+
+   /*
     int c=0;
     int Zeilenanzahl=10;//Beispiel
     vector<vector<int> > matrix(); // Zweidimensionalen Vektor (Matrix mit einer Zeile??)
@@ -50,6 +64,7 @@ int main ( int argc, char *argv[] )
        cout<<line<<endl;
        j++; //Zeilennummer um 1 erhöht!
     }
+    */
     /*
     ifstream read("Eigenschaften.txt");
     int array[6][10],i,j;
@@ -108,35 +123,6 @@ int main ( int argc, char *argv[] )
     cout<< testvektor[0][0] <<endl;
     //test[3][0] = 10;
     //cout<<test[2][3]<<endl;
-*/
-/*
-#include <iostream>
-#include <vector>
-#include <string>
-
-using namespace std;
-
-int main(void) {
-    vector<vector<string> > m(10);
-
-    for(int i = 0; i < 10; i++)
-        m[i].resize(3);
-
-    m[0][0] = "Peter";
-    m[0][1] = "Lustig";
-    m[0][2] = "31337";
-
-    m[1][0] = "Dieter";
-    m[1][1] = "Himmel";
-    m[1][2] = "51";
-
-    for(int i = 0; i < 3; i++)
-        cout << m[1].at(i);
-
-
-
-    return 0;
-}
 */
 return 0;
 }
