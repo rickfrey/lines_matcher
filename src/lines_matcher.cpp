@@ -42,7 +42,7 @@ int main ( int argc, char *argv[] )
     cout<<line<<endl;
     cout<<&Pose<<endl;
 
- //   Bildinfo Bild1;
+    //Bildinfo Bild1;
     //Bild1.set
 
 

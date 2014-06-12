@@ -20,8 +20,9 @@ void Bildinfo::setPose(float x, float y, float z, float r, float p, float ya)
     this->ya=ya;
 }
 */
-
+/*
 void Bildinfo::setPose(std::vector<int> Pose)
 {
 //this->
 }
+*/
