@@ -5,18 +5,18 @@
 
 using namespace std;
 
-void Bildinfo::setLinienarray(int aa, int bb, int cc, int dd, int ee, int ff)
+void Bildinfo::setPosenarray(int aa, int bb, int cc, int dd, int ee, int ff)
 {
-    this->Array[0]=aa;
-    this->Array[1]=bb;
-    this->Array[2]=cc;
-    this->Array[3]=dd;
-    this->Array[4]=ee;
-    this->Array[5]=ff;
+    this->Posenarray[0]=aa;
+    this->Posenarray[1]=bb;
+    this->Posenarray[2]=cc;
+    this->Posenarray[3]=dd;
+    this->Posenarray[4]=ee;
+    this->Posenarray[5]=ff;
 }
 int Bildinfo::getLinienarray()
 {
-    return this->Array[2];
+    return this->Posenarray[2];
 }
 /*
 void Bildinfo::setPose(float x, float y, float z, float r, float p, float ya)

@@ -29,24 +29,45 @@ int main ( int argc, char *argv[] )
     // ifstream, but some file specific things like opening or closing files will not work on an istream as it's not that specific
     ifstream inputFile("Eigenschaften.txt"); //input file stream
     string line;
+    while(inputFile.good())//So lange Daten in Datei
+    {
     getline(inputFile,line);// hier wird eine Zeile aus Textdatei gelesen und in stringstream gespeichert
     istringstream is(line); //class for char input memory streams
     //vector<int> Pose(6); //hier werden die 6DoF eingelesen
     int Pose[6];
-    int n, columns=0,i=0;
+    int n, columns=0,i=0,j=0;
+    while(is>>n)
+    {
+    j++;//Zählen der Spalten in eingelesener Zeile
+    }
+    if(j==6)
+    {
+    std::stringstream Objektname;
+    Objektname<<"Bild"<<k;//k muss für jede 6er Zeile hochgezählt werden
+    Bildinfo Objektname; //neues Bildobjekt anlegen
+    vector<int> Posenvektor(6);
+    }
     while(is>>n)//so lange wie Zeichen im stringstream sind:
     {
         Pose[i]=n;
         cout<<Pose[i]<<endl;
         i++;
     }
+    //Die folgenden Zeilen in neuen Array schreiben so lang wie nur 4 Spalten
+    vector <vector<int> > Linienparameter;
+    if(i==4)//Wenn
+    {
+
+    }
     cout<<line<<endl;
     cout<<&Pose<<endl;
 
     Bildinfo Bild1;
-    Bild1.setLinienarray(Pose[0],Pose[1],Pose[2],Pose[3],Pose[4],Pose[5]);
+    Bild1.setPosenarray(Pose[0],Pose[1],Pose[2],Pose[3],Pose[4],Pose[5]);
     int a=Bild1.getLinienarray();
     cout<<"TESTTEST: "<<a;
+    }
+
    /*
     int c=0;
     int Zeilenanzahl=10;//Beispiel

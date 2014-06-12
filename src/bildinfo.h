@@ -11,14 +11,14 @@ private:
     //int a=6;
     //int Linienarray[a];
 //    std::vector<int> Pose(6);
-    int Array[6];
+    int Posenarray[6];
 
 public:
     Bildinfo();
     ~Bildinfo();
 
     //void setPose(float x, float y, float z, float r, float p, float ya);
-    void setLinienarray(int aa, int bb, int cc, int dd, int ee, int ff);
+    void setPosenarray(int aa, int bb, int cc, int dd, int ee, int ff);
 //    void setPose(std::vector<int> Pose);
     int getLinienarray();
 };
