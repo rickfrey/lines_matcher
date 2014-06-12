@@ -6,6 +6,7 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <sstream>
+#include"bildinfo.h"
 
 using namespace std;
 
@@ -18,11 +19,31 @@ int main ( int argc, char *argv[] )
     // 4. Pose über setPose an Bild1 übergeben
     // 5. folgende Zeilen (Linienpararmeter) in n x 4 - Array laden
     // 6. Array mit setLinienarray an Bild1 übergeben
-    // 7. Alle Zeilen bis hierhin löschen
+    // 7. Alle Zeilen bis hierhin löschen (oder Zeile merken)
     // 8. So lange wiederholen bis Textdatei leer
+    // !!!!MEMBERVARIABLE: FEHLER ZUM REALEN SET: FEHLER ALLER KLASSEN WIEDER IN VEKTOR SCHREIBEN!!!
 
+    // isteam: general input stream class
+    // ifstream works on files (that's what the f is for)
+    // This means that the things you want to do with an istream like reading in characters or lines works the same way as on an
+    // ifstream, but some file specific things like opening or closing files will not work on an istream as it's not that specific
+    ifstream inputFile("Eigenschaften.txt"); //input file stream
+    string line;
+    getline(inputFile,line);// hier wird eine Zeile aus Textdatei gelesen und in stringstream gespeichert
+    istringstream is(line); //class for char input memory streams
+    vector<int> Pose(6); //hier werden die 6DoF eingelesen
+    int n, columns=0,i=0;
+    while(is>>n)//so lange wie Zeichen im stringstream sind:
+    {
+        Pose[i]=n;
+        cout<<Pose[i]<<endl;
+        i++;
+    }
+    cout<<line<<endl;
+    cout<<&Pose<<endl;
 
-
+ //   Bildinfo Bild1;
+    //Bild1.set
 
 
    /*
