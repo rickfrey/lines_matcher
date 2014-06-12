@@ -9,7 +9,7 @@
 #include"bildinfo.h"
 
 using namespace std;
-
+typedef <vector<vector<double> > Vektordef;
 
 int main ( int argc, char *argv[] )
 {
@@ -46,6 +46,7 @@ int main ( int argc, char *argv[] )
     Objektname<<"Bild"<<k;//k muss für jede 6er Zeile hochgezählt werden
     Bildinfo Objektname; //neues Bildobjekt anlegen
     vector<int> Posenvektor(6);
+    Objektname.
     }
     while(is>>n)//so lange wie Zeichen im stringstream sind:
     {

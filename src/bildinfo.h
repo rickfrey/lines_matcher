@@ -12,6 +12,7 @@ private:
     //int Linienarray[a];
 //    std::vector<int> Pose(6);
     int Posenarray[6];
+    vector<vector<int> > Linienvektor;
 
 public:
     Bildinfo();
@@ -21,6 +22,7 @@ public:
     void setPosenarray(int aa, int bb, int cc, int dd, int ee, int ff);
 //    void setPose(std::vector<int> Pose);
     int getLinienarray();
+    void setLinienvektor(vector<vector<int> > vektor);
 };
 
 #endif

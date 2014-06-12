@@ -18,6 +18,10 @@ int Bildinfo::getLinienarray()
 {
     return this->Posenarray[2];
 }
+void setLinienvektor(vector<vector<int> > vektor)
+{
+this->Linienvektor=vektor;
+}
 /*
 void Bildinfo::setPose(float x, float y, float z, float r, float p, float ya)
 {
