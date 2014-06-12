@@ -31,7 +31,8 @@ int main ( int argc, char *argv[] )
     string line;
     getline(inputFile,line);// hier wird eine Zeile aus Textdatei gelesen und in stringstream gespeichert
     istringstream is(line); //class for char input memory streams
-    vector<int> Pose(6); //hier werden die 6DoF eingelesen
+    //vector<int> Pose(6); //hier werden die 6DoF eingelesen
+    int Pose[6];
     int n, columns=0,i=0;
     while(is>>n)//so lange wie Zeichen im stringstream sind:
     {
@@ -42,10 +43,10 @@ int main ( int argc, char *argv[] )
     cout<<line<<endl;
     cout<<&Pose<<endl;
 
-    //Bildinfo Bild1;
-    //Bild1.set
-
-
+    Bildinfo Bild1;
+    Bild1.setLinienarray(Pose[0],Pose[1],Pose[2],Pose[3],Pose[4],Pose[5]);
+    int a=Bild1.getLinienarray();
+    cout<<"TESTTEST: "<<a;
    /*
     int c=0;
     int Zeilenanzahl=10;//Beispiel
