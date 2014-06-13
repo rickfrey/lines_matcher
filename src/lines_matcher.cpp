@@ -39,7 +39,8 @@ int main ( int argc, char *argv[] )
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
         return -1;
 
-    std::vector<Bildinfo> BildInfoVector;
+    std::vector<Bildinfo> BildInfoVector;   // Vektor vom Typ Bildinfo!!!!! an jeder Stelle des
+                                            // Vektors steht eine Objekt von Bildinfo!!!!
     int k =0;
     QTextStream in(&file);
     while (!in.atEnd()) {
@@ -47,9 +48,7 @@ int main ( int argc, char *argv[] )
         //So lange Daten in Datei
         QString line = in.readLine();
         int numOfCol = line.count(QLatin1Char(' '));
-        numOfCol++;
-
-
+        numOfCol++; // Anzahl der Spalten = Anzahl Leerzeichen +1
 
         //////////////////////////
         // Bis hier wurde eine Zeile eingelesen und die Anzahl der Spalten in der Variablen "numOfCol" gespeichert
@@ -62,26 +61,22 @@ int main ( int argc, char *argv[] )
         {
          //   QString Objektname= QString("Bild%1").arg(k);
            // k++;
-            Bildinfo bi; //neues Bildobjekt anlegen //EIGENTLICH: "Objektname" anstatt Bild1!!! wenn Bildinfo *Bild1 habe ich einen Zeiger!
+            Bildinfo bi; //neues Bildobjekt anlegen
             vector<int> posenvektor;//hier werden die 6 DoF reingespeichert
             QStringList list1 = line.split(" ");
             for(int i = 0; i < list1.size(); ++i)
             {
-                posenvektor.push_back(list1.at(i).toInt());
-
+                posenvektor.push_back(list1.at(i).toInt()); // Eingelesene Elemente werden in posenvektor geschrieben (und gleichzeitig zu int convertiert)
             }
-            bi.setPosenvektor(posenvektor);
-            int Poseneintrag=bi.getPoseneintrag();
-            cout<<"Eintrag aus Posenvektor: "<<Poseneintrag<<endl;
-            BildInfoVector.push_back(bi);
-
-
+            bi.setPosenvektor(posenvektor); // posenvektor wird an Objekt an Posenvektor von Objekt bi übergeben
+            //int Poseneintrag=bi.getPoseneintrag();
+            //cout<<"Eintrag aus Posenvektor: "<<Poseneintrag<<endl;
+            BildInfoVector.push_back(bi);   // Objekt bi wird an aktuell letzte Position des Vektors BildInfoVector geschrieben
         }
 
         ////////////////////////
         // Wenn 4 Spalten: Einträge in Linienvektor des aktuellen Objekts speichern:
         ////////////////////////
-
         int m=0,p; // Vektorlaufvariable
         if(numOfCol==4)
         {
@@ -90,17 +85,19 @@ int main ( int argc, char *argv[] )
             for(int i = 0; i < list1.size(); ++i)
             {
                 linienparameter.push_back(list1.at(i).toInt());
-
             }
-
-            BildInfoVector.at(BildInfoVector.size()-1).addLinienvektor(linienparameter);
-
+            // ???? NOCH NICHT SO GANZ VERSTANDEN WARUM DAS FUNKTIONIERT ????????
+            // funktioniert das evtl. weil der Linienvektor einfach hinten drangeschrieben wird (an BildInfoVector)?
+            BildInfoVector.at(BildInfoVector.size()-1).addLinienvektor(linienparameter);// ??? Hier wird die Memberfunktion "addLinienvektor" aufgerufen und eine Zeile angehängt.
+                                                                                        // Anschließend wird das an die passende Stelle von BildInfoVector geschrieben
         }
 
         //cout<<line<<endl;
 
     }
     file.close();
+
+    //BildInfoVector.at(0).
 
     /*
     int c=0;
@@ -201,5 +198,6 @@ int main ( int argc, char *argv[] )
     //test[3][0] = 10;
     //cout<<test[2][3]<<endl;
 */
+
     return 0;
 }
