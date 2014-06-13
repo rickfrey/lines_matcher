@@ -9,7 +9,7 @@
 #include"bildinfo.h"
 
 using namespace std;
-typedef <vector<vector<double> > Vektordef;
+//typedef <vector<vector<double> > Vektordef;
 
 int main ( int argc, char *argv[] )
 {
@@ -29,44 +29,58 @@ int main ( int argc, char *argv[] )
     // ifstream, but some file specific things like opening or closing files will not work on an istream as it's not that specific
     ifstream inputFile("Eigenschaften.txt"); //input file stream
     string line;
+
     while(inputFile.good())//So lange Daten in Datei
     {
     getline(inputFile,line);// hier wird eine Zeile aus Textdatei gelesen und in stringstream gespeichert
     istringstream is(line); //class for char input memory streams
-    //vector<int> Pose(6); //hier werden die 6DoF eingelesen
-    int Pose[6];
-    int n, columns=0,i=0,j=0;
+    istringstream is2(line); // zweimal selbe Zeile einlese weil einmal um Spalten zu zählen und anschließend im zweiten stringstream um in Vektor zu schreiben
+    int n, columns=0,i=0,j=0,k=1;
     while(is>>n)
     {
-    j++;//Zählen der Spalten in eingelesener Zeile
+    columns++;//Zählen der Spalten in eingelesener Zeile
     }
-    if(j==6)
+    //////////////////////////
+    // Bis hier wurde eine Zeile eingelesen und die Anzahl der Spalten in der Variablen "columns" gespeichert
+    /////////////////////////
+
+    /////////////////////////
+    // Wenn 6 Spalten: Objekt anlegen und Zeile in Posenvektor speichern:
+    ////////////////////////
+    if(columns==6)
     {
     std::stringstream Objektname;
     Objektname<<"Bild"<<k;//k muss für jede 6er Zeile hochgezählt werden
-    Bildinfo Objektname; //neues Bildobjekt anlegen
-    vector<int> Posenvektor(6);
-    Objektname.
-    }
-    while(is>>n)//so lange wie Zeichen im stringstream sind:
+    Bildinfo Bild1; //neues Bildobjekt anlegen //EIGENTLICH: "Objektname" anstatt Bild1!!! wenn Bildinfo *Bild1 habe ich einen Zeiger!
+    vector<int> Posenvektor(6);//hier werden die 6 DoF reingespeichert
+    int l=0; // Vektorlaufvariable
+    while(is2>>n)
     {
-        Pose[i]=n;
-        cout<<Pose[i]<<endl;
-        i++;
+        Posenvektor[l]=n;
+        l++;
     }
-    //Die folgenden Zeilen in neuen Array schreiben so lang wie nur 4 Spalten
-    vector <vector<int> > Linienparameter;
-    if(i==4)//Wenn
+    Bild1.setPosenvektor(Posenvektor);
+    int Poseneintrag=Bild1.getPoseneintrag();
+    cout<<"Eintrag aus Posenvektor: "<<Poseneintrag<<endl;
+    }
+
+    ////////////////////////
+    // Wenn 4 Spalten: Einträge in Linienvektor des aktuellen Objekts speichern:
+    ////////////////////////
+    vector<int> Linienparameter(4);
+    int m=0,p; // Vektorlaufvariable
+    if(columns==4)
     {
-
+        while(is2>>p)
+        {
+            Linienparameter[m]=p;
+            cout<<"Linienparamter["<<m<<"]= "<<Linienparameter[m]<<endl;
+            m++;
+        }
+        Bild1.addLinienvektor(Linienparameter);
     }
-    cout<<line<<endl;
-    cout<<&Pose<<endl;
+    //cout<<line<<endl;
 
-    Bildinfo Bild1;
-    Bild1.setPosenarray(Pose[0],Pose[1],Pose[2],Pose[3],Pose[4],Pose[5]);
-    int a=Bild1.getLinienarray();
-    cout<<"TESTTEST: "<<a;
     }
 
    /*

@@ -5,42 +5,40 @@
 
 using namespace std;
 
-void Bildinfo::setPosenarray(int aa, int bb, int cc, int dd, int ee, int ff)
+void addLinienvektor(vector<int> vektor)
 {
-    this->Posenarray[0]=aa;
-    this->Posenarray[1]=bb;
-    this->Posenarray[2]=cc;
-    this->Posenarray[3]=dd;
-    this->Posenarray[4]=ee;
-    this->Posenarray[5]=ff;
+    // Hier immer eine neue Zeile zum Linienvektor dazu
+    // neue Zeile resizen (Linienvektor[aktueller Zeile].resize(4))
+    // anschließend die Werte des übergebenen Vektors in Linienvektor (Membervariable) speichern
+
+    this->Zeilenanzahl=Zeilenanzahl+1;//ändert die aktuelle Anzahl der Zeilen
+    this->Linienvektor.resize(Zeilenanzahl);
+    this->Linienvektor[this->Zeilenanzahl -1].resize(4); // aktuelle Zeile soll 4 Spalten haben
+    for(int i=0;i<4;i++)
+    {
+        this->Linienvektor[Zeilenanzahl - 1][i]=vektor[i];// übergebener Vektor wird in neue Zeile übernommen
+    }
 }
-int Bildinfo::getLinienarray()
+void Bildinfo::setPosenvektor(vector<int> vektor)
 {
-    return this->Posenarray[2];
+this->Posenvektor=vektor;
 }
-void setLinienvektor(vector<vector<int> > vektor)
+
+
+int Bildinfo::getPoseneintrag()
 {
-this->Linienvektor=vektor;
+    return this->Posenvektor[5];
 }
-/*
-void Bildinfo::setPose(float x, float y, float z, float r, float p, float ya)
+
+int Bildinfo::getLinieneintrag()
 {
-    this->x=x;
-    this->y=y;
-    this->z=z;
-    this->r=r;
-    this->p=p;
-    this->ya=ya;
+    return this->Linienvektor[1][1];
 }
-*/
-/*
-void Bildinfo::setPose(std::vector<int> Pose)
-{
-//this->
-}
-*/
+
 
 Bildinfo::Bildinfo()
-{}
+{
+this->Zeilenanzahl=0;//Am Anfang hat Vektor 0 Zeilen
+}
 Bildinfo::~Bildinfo()
 {}
