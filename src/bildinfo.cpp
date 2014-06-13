@@ -12,17 +12,13 @@ void Bildinfo::addLinienvektor(vector<int> vektor)
     // anschließend die Werte des übergebenen Vektors in Linienvektor (Membervariable) speichern
 
     this->Zeilenanzahl++;//ändert die aktuelle Anzahl der Zeilen
-    //Linienvektor.push_back(vektor);
+    Linienvektor.push_back(vektor);
 
-    std::vector<int>* clone = new std::vector<int>();
-    for(int i = 0; i< vektor.size(); i++)
-        clone->push_back(vektor.at(i));
 
-    Linienvektor.push_back(clone);
 }
 void Bildinfo::setPosenvektor(vector<int> vektor)
 {
-this->Posenvektor=vektor;
+    this->Posenvektor=vektor;
 }
 
 
@@ -33,7 +29,7 @@ int Bildinfo::getPoseneintrag()
 
 int Bildinfo::getLinieneintrag()
 {
-    return this->Linienvektor[1]->at(1);
+    return this->Linienvektor[1][1];
 }
 
 
