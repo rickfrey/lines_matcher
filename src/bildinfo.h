@@ -13,7 +13,8 @@ private:
 //    std::vector<int> Pose(6);
     int Zeilenanzahl;
     vector<int> Posenvektor;
-    vector<vector<int> > Linienvektor;
+    vector< int > Linienvektor1;
+    vector<int>  Linienvektor2;
 
 public:
     Bildinfo();
