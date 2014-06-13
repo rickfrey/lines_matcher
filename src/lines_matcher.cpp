@@ -79,6 +79,7 @@ int main ( int argc, char *argv[] )
         }
         Bild1.addLinienvektor(Linienparameter);
     }
+
     //cout<<line<<endl;
 
     }
