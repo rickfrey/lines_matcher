@@ -32,6 +32,11 @@ int Bildinfo::getLinieneintrag(int liniennummer, int parameter)
     return this->Linienvektor[liniennummer][parameter];
 }
 
+int Bildinfo::getLinienanzahl()
+{
+    return Linienvektor.size();
+}
+
 
 Bildinfo::Bildinfo()
 {

@@ -99,8 +99,18 @@ int main ( int argc, char *argv[] )
 
     int test=BildInfoVector[0].getPoseneintrag(0);
     cout<<"Poseneintrag[0]= "<<test;
-    int test2=BildInfoVector[0].getLinieneintrag(1,1);
-    cout<<"Linieneintrag[1][1]= "<<test2;
+    int test2=BildInfoVector[1].getLinieneintrag(3,2);
+    cout<<"Linieneintrag[1][1]= "<<test2<<endl;
+    cout<<"Linienanzahl= "<<BildInfoVector[0].getLinienanzahl();
+
+    /***************************
+      1. k und n ermitteln
+      2. Alle Permutationen berechnen (gibt an welche Linien miteinander verglichen werden)
+      3. in Schleife mit jeder einzelnen Permutation: Berechnung eines Fehlers für jede Linie
+         => Addieren der Fehler aller Linien dieser Permutation, anschließend durch Anzahl teilen
+            (Mittelwert)
+      4. Gesamtfehler des Liniensets in jeweiligem Objekt speichern
+      *************************/
 
     return 0;
 }

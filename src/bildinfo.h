@@ -22,6 +22,7 @@ public:
 
     void addLinienvektor(vector<int> vektor);
     void setPosenvektor(vector<int> vektor);
+    int getLinienanzahl();
     int getPoseneintrag(int eintrag);
     int getLinieneintrag(int liniennummer, int parameter);
 };
