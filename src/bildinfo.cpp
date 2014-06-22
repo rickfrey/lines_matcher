@@ -22,14 +22,14 @@ void Bildinfo::setPosenvektor(vector<int> vektor)
 }
 
 
-int Bildinfo::getPoseneintrag()
+int Bildinfo::getPoseneintrag(int eintrag)
 {
-    return this->Posenvektor[5];
+    return this->Posenvektor[eintrag];
 }
 
-int Bildinfo::getLinieneintrag()
+int Bildinfo::getLinieneintrag(int liniennummer, int parameter)
 {
-    return this->Linienvektor[1][1];
+    return this->Linienvektor[liniennummer][parameter];
 }
 
 
