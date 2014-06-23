@@ -10,38 +10,56 @@
 #include <QStringList>
 #include <QTextStream>
 #include <QFile>
-
 #include"bildinfo.h"
+
+vector<int> people;
+vector<int> combination;
 
 using namespace std;
 //typedef <vector<vector<double> > Vektordef;
 
+void print_combinations() {
+    static int count = 0;
+    cout << "combination no " << (++count) << ": [ ";
+    for (int i = 0; i < combination.size(); ++i) { cout << combination[i] << " "; }
+    cout << "] " << endl;
+
+
+    while(next_permutation(combination.begin(), combination.end()) ){
+        cout<<"[";
+        for(vector<int>::iterator it = combination.begin(); it != combination.end(); it++)
+            cout << *it << " ";
+        cout << "]" << endl;
+
+        //////////////////////////
+        // IN DIESER SCHEIFE ENTSPRECHENDE LINIENKOMBINATION DURCHSPIELEN
+    }
+
+}
+
+void go(int offset, int k) {
+    if (k == 0) { //
+        print_combinations();
+        return;
+    }
+    for (int i = offset; i <= people.size() - k; ++i) { // 3. Schleife von 0 bis (n-k)
+        combination.push_back(people[i]); // 4. Vektor "combination": i-te Stelle wird mit people[i] gefüllt
+        //cout<<"Test: people["<<i<<"]= "<<people[i]<<endl;
+        //cout<<"Test: combination["<<i<<"]= "<<combination[i]<<endl;
+        go(i+1, k-1);
+        combination.pop_back(); // pop_back verkleinert Vektor um eine Stelle
+    }
+}
+
 int main ( int argc, char *argv[] )
 {
-    // 1. Datei öffnen
-    // 2. Objekt Bild1 anlegen
-    // 3. Pose aus Textdatei lesen
-    // 4. Pose über setPose an Bild1 übergeben
-    // 5. folgende Zeilen (Linienpararmeter) in n x 4 - Array laden
-    // 6. Array mit setLinienarray an Bild1 übergeben
-    // 7. Alle Zeilen bis hierhin löschen (oder Zeile merken)
-    // 8. So lange wiederholen bis Textdatei leer
-    // !!!!MEMBERVARIABLE: FEHLER ZUM REALEN SET: FEHLER ALLER KLASSEN WIEDER IN VEKTOR SCHREIBEN!!!
-
-    // isteam: general input stream class
-    // ifstream works on files (that's what the f is for)
-    // This means that the things you want to do with an istream like reading in characters or lines works the same way as on an
-    // ifstream, but some file specific things like opening or closing files will not work on an istream as it's not that specific
-    //    ifstream inputFile("Eigenschaften.txt"); //input file stream
-    //    string line;
-
     QFile file("Eigenschaften.txt");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
         return -1;
 
     std::vector<Bildinfo> BildInfoVector;   // Vektor vom Typ Bildinfo!!!!! an jeder Stelle des
-                                            // Vektors steht eine Objekt von Bildinfo!!!!
-    int k =0;
+    // Vektors steht eine Objekt von Bildinfo!!!!
+    //int k =0;
     QTextStream in(&file);
     while (!in.atEnd()) {
 
@@ -59,8 +77,8 @@ int main ( int argc, char *argv[] )
         ////////////////////////
         if(numOfCol==6)
         {
-         //   QString Objektname= QString("Bild%1").arg(k);
-           // k++;
+            //   QString Objektname= QString("Bild%1").arg(k);
+            // k++;
             Bildinfo bi; //neues Bildobjekt anlegen
             vector<int> posenvektor;//hier werden die 6 DoF reingespeichert
             QStringList list1 = line.split(" ");
@@ -89,7 +107,7 @@ int main ( int argc, char *argv[] )
             // ???? NOCH NICHT SO GANZ VERSTANDEN WARUM DAS FUNKTIONIERT ????????
             // funktioniert das evtl. weil der Linienvektor einfach hinten drangeschrieben wird (an BildInfoVector)?
             BildInfoVector.at(BildInfoVector.size()-1).addLinienvektor(linienparameter);// ??? Hier wird die Memberfunktion "addLinienvektor" aufgerufen und eine Zeile angehängt.
-                                                                                        // Anschließend wird das an die passende Stelle von BildInfoVector geschrieben
+            // Anschließend wird das an die passende Stelle von BildInfoVector geschrieben
         }
 
         //cout<<line<<endl;
@@ -100,7 +118,7 @@ int main ( int argc, char *argv[] )
     int test=BildInfoVector[0].getPoseneintrag(0);
     cout<<"Poseneintrag[0]= "<<test;
     int test2=BildInfoVector[1].getLinieneintrag(3,2);
-    cout<<"Linieneintrag[1][1]= "<<test2<<endl;
+    cout<<"Linieneintrag[3][2]= "<<test2<<endl;
     cout<<"Linienanzahl= "<<BildInfoVector[0].getLinienanzahl();
 
     /***************************
@@ -111,6 +129,42 @@ int main ( int argc, char *argv[] )
             (Mittelwert)
       4. Gesamtfehler des Liniensets in jeweiligem Objekt speichern
       *************************/
+
+    // reales Linienset laden
+    vector<vector <int> > reales_Set;
+    for(int i = 0; i < 5; i++)// es werden 5 Zeilen reserviert
+    {
+        vector<int> row;
+        reales_Set.push_back(row);
+    }
+    reales_Set[0].push_back(100); reales_Set[0].push_back(300); reales_Set[0].push_back(25); reales_Set[0].push_back(200);
+    reales_Set[1].push_back(100); reales_Set[1].push_back(400); reales_Set[1].push_back(28); reales_Set[1].push_back(220);
+    reales_Set[2].push_back(200); reales_Set[2].push_back(300); reales_Set[2].push_back(90); reales_Set[2].push_back(50);
+    reales_Set[3].push_back(350); reales_Set[3].push_back(300); reales_Set[3].push_back(-15); reales_Set[3].push_back(230);
+    reales_Set[0].push_back(350); reales_Set[0].push_back(400); reales_Set[0].push_back(-20); reales_Set[0].push_back(240);
+
+    int n, k;
+    // Größen des synthetischen Linienvektors und des reales_Set-Vektors vergleichen
+    if(BildInfoVector[0].getLinienanzahl() > reales_Set.size())
+    {
+        n=BildInfoVector[0].getLinienanzahl();
+        k=reales_Set.size();
+    }
+    else if (BildInfoVector[0].getLinienanzahl() < reales_Set.size())
+    {
+        n=reales_Set.size();
+        k=BildInfoVector[0].getLinienanzahl();
+    }
+    else if (BildInfoVector[0].getLinienanzahl() == reales_Set.size())
+    {
+        n=reales_Set.size(); // beide gleich groß!
+        k=reales_Set.size();
+    }
+    cout<<"k= "<<k<<endl;
+    cout <<"n= "<<n<<endl;
+
+    for (int i = 0; i < n; ++i) { people.push_back(i+1);} // 1. Hier wird lediglich Vektor people mit 1,2,3,4...bis n gefüllt
+    go(0, k); // 2. Aufruf der Funktion go mit k als Parameter
 
     return 0;
 }
