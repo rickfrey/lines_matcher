@@ -14,27 +14,61 @@
 
 vector<int> people;
 vector<int> combination;
+vector<vector <int> > reales_Set;
+std::vector<Bildinfo> BildInfoVector;   // Vektor vom Typ Bildinfo!!!!! an jeder Stelle des
+// Vektors steht eine Objekt von Bildinfo!!!!
 
 using namespace std;
 //typedef <vector<vector<double> > Vektordef;
 
+void error_calc(vector<int> permutation){
+    // der übergebene Vektor permutation stellt die Beziehung zwischen den Vektoren
+    // BildInfoVec und reales_Set her
+    // Einzige Frage: Wie bestimme ich den statischen Vektor (der immer 1 2 3 4... durchläuft)
+    //                und den Vektor, auf dessen Einträge mit der Permutationsvorschrift zugegriffen werden???
+
+    // statischer Vektor ist immer der kleinere!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+    //Fall: synthetisches Set ist kleiner:
+    int Fehler=0;
+    if(BildInfoVector[0].getLinienanzahl() < reales_Set.size())//Stelle des Bildinfovectors muss fortlaufend sein (muss noch geändert werden)
+    {
+        //Fehler berechnen und in Bildobjekt speichern
+        for(int x=0; x<BildInfoVector[0].getLinienanzahl;x++)
+        {
+            for(int z=0;z<4;z++)//Alle 4 Parameter durchlaufen
+            {
+                Fehler=Fehler+BildInfoVector[0].getLinieneintrag[x][z]-reales_Set[permutation[x]][z]
+            }
+        }
+        Fehler=Fehler/BildInfoVector[0].getLinienanzahl();//Mittelwert
+        BildInfoVector[0].setFehler=Fehler;//berechneter Gesamtfehler für Set
+    }
+
+}
+
 void print_combinations() {
+    vector<int> permutation;
     static int count = 0;
+    error_calc(combination);// WICHTIG!!! 1. Durchlauf mit sortierter Permutation!!!
     cout << "combination no " << (++count) << ": [ ";
-    for (int i = 0; i < combination.size(); ++i) { cout << combination[i] << " "; }
+    for (int i = 0; i < combination.size(); ++i) {
+        cout << combination[i] << " ";
+    }
     cout << "] " << endl;
 
 
     while(next_permutation(combination.begin(), combination.end()) ){
         cout<<"[";
         for(vector<int>::iterator it = combination.begin(); it != combination.end(); it++)
+        {
             cout << *it << " ";
+            permutation.push_back(*it); // Hier wird der Wert des Iterators (Zeigers) in permutation gespeichert
+        }
+        error_calc(permutation); // Vektor permutation wird an Funktion error_calc übergeben
+        permutation.clear();
         cout << "]" << endl;
-
-        //////////////////////////
-        // IN DIESER SCHEIFE ENTSPRECHENDE LINIENKOMBINATION DURCHSPIELEN
     }
-
 }
 
 void go(int offset, int k) {
@@ -57,8 +91,6 @@ int main ( int argc, char *argv[] )
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
         return -1;
 
-    std::vector<Bildinfo> BildInfoVector;   // Vektor vom Typ Bildinfo!!!!! an jeder Stelle des
-    // Vektors steht eine Objekt von Bildinfo!!!!
     //int k =0;
     QTextStream in(&file);
     while (!in.atEnd()) {
@@ -131,7 +163,7 @@ int main ( int argc, char *argv[] )
       *************************/
 
     // reales Linienset laden
-    vector<vector <int> > reales_Set;
+
     for(int i = 0; i < 5; i++)// es werden 5 Zeilen reserviert
     {
         vector<int> row;
@@ -143,28 +175,31 @@ int main ( int argc, char *argv[] )
     reales_Set[3].push_back(350); reales_Set[3].push_back(300); reales_Set[3].push_back(-15); reales_Set[3].push_back(230);
     reales_Set[0].push_back(350); reales_Set[0].push_back(400); reales_Set[0].push_back(-20); reales_Set[0].push_back(240);
 
-    int n, k;
-    // Größen des synthetischen Linienvektors und des reales_Set-Vektors vergleichen
-    if(BildInfoVector[0].getLinienanzahl() > reales_Set.size())
-    {
-        n=BildInfoVector[0].getLinienanzahl();
-        k=reales_Set.size();
-    }
-    else if (BildInfoVector[0].getLinienanzahl() < reales_Set.size())
-    {
-        n=reales_Set.size();
-        k=BildInfoVector[0].getLinienanzahl();
-    }
-    else if (BildInfoVector[0].getLinienanzahl() == reales_Set.size())
-    {
-        n=reales_Set.size(); // beide gleich groß!
-        k=reales_Set.size();
-    }
-    cout<<"k= "<<k<<endl;
-    cout <<"n= "<<n<<endl;
 
-    for (int i = 0; i < n; ++i) { people.push_back(i+1);} // 1. Hier wird lediglich Vektor people mit 1,2,3,4...bis n gefüllt
-    go(0, k); // 2. Aufruf der Funktion go mit k als Parameter
+    for (int AnzahlBilder=0; AnzahlBilder<BildInfoVector.size();AnzahlBilder++)
+    {
+        int n, k;
+        // Größen des synthetischen Linienvektors und des reales_Set-Vektors vergleichen
+        if(BildInfoVector[AnzahlBilder].getLinienanzahl() > reales_Set.size())
+        {
+            n=BildInfoVector[AnzahlBilder].getLinienanzahl();
+            k=reales_Set.size();
+        }
+        else if (BildInfoVector[AnzahlBilder].getLinienanzahl() < reales_Set.size())
+        {
+            n=reales_Set.size();
+            k=BildInfoVector[AnzahlBilder].getLinienanzahl();
+        }
+        else if (BildInfoVector[AnzahlBilder].getLinienanzahl() == reales_Set.size())
+        {
+            n=reales_Set.size(); // beide gleich groß!
+            k=reales_Set.size();
+        }
+        cout<<"k= "<<k<<endl;
+        cout <<"n= "<<n<<endl;
 
+        for (int i = 0; i < n; ++i) { people.push_back(i+1);} // 1. Hier wird lediglich Vektor people mit 1,2,3,4...bis n gefüllt
+        go(0, k); // 2. Aufruf der Funktion go mit k als Parameter
+    }
     return 0;
 }

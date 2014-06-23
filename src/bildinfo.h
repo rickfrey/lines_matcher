@@ -14,6 +14,7 @@ private:
     int Zeilenanzahl;
     vector<int> Posenvektor;
     vector< vector<int> > Linienvektor;
+    float Fehler;
 
 public:
     Bildinfo();
@@ -25,6 +26,8 @@ public:
     int getLinienanzahl();
     int getPoseneintrag(int eintrag);
     int getLinieneintrag(int liniennummer, int parameter);
+    void setFehler(float Fehler);
+    float getFehler();
 };
 
 #endif

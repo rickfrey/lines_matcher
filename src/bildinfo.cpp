@@ -37,10 +37,20 @@ int Bildinfo::getLinienanzahl()
     return Linienvektor.size();
 }
 
+void Bildinfo::setFehler(float Fehler)
+{
+    this->Fehler=Fehler;
+}
+
+float Bildinfo::getFehler()
+{
+    return this->Fehler;
+}
+
 
 Bildinfo::Bildinfo()
 {
-this->Zeilenanzahl=0;//Am Anfang hat Vektor 0 Zeilen
+    this->Zeilenanzahl=0;//Am Anfang hat Vektor 0 Zeilen
 }
 Bildinfo::~Bildinfo()
 {}
