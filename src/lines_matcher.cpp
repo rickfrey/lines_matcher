@@ -18,7 +18,8 @@ vector<int> people;
 vector<int> combination;
 vector<vector <int> > reales_Set;
 std::vector<Bildinfo> BildInfoVector;   // Vektor vom Typ Bildinfo!!!!! an jeder Stelle des
-// Vektors steht eine Objekt von Bildinfo!!!!
+                                        // Vektors steht eine Objekt von Bildinfo!!!!
+int Bildlaufvariable;
 
 using namespace std;
 //typedef <vector<vector<double> > Vektordef;
@@ -33,51 +34,49 @@ void error_calc(vector<int> permutation){
 
     //Fall: synthetisches Set ist kleiner:
     float Fehler;
-    float kleinsterFehler=100000;
     //vector<float> Fehlervec;// Fehlervektor!! Fehler für jede Setkombination speichern, niedrigsten Wert an Objekt übergeben!
-    if(BildInfoVector[0].getLinienanzahl() < reales_Set.size())//Stelle des Bildinfovectors muss fortlaufend sein (muss noch geändert werden)
+    if(BildInfoVector[Bildlaufvariable].getLinienanzahl() < reales_Set.size())//Stelle des Bildinfovectors muss fortlaufend sein (muss noch geändert werden)
     {
         //Fehler berechnen und in Bildobjekt speichern
-        for(int x=0; x<BildInfoVector[0].getLinienanzahl();x++)
+        for(int x=0; x<BildInfoVector[Bildlaufvariable].getLinienanzahl();x++)
         {
             for(int z=0;z<4;z++)//Alle 4 Parameter durchlaufen
             {
-                int test1=BildInfoVector[0].getLinieneintrag(x,z);
-                int test2=reales_Set[permutation[x]-1][z];
-                int test3= BildInfoVector[0].getLinieneintrag(x,z)-reales_Set[permutation[x]-1][z];
-                Fehler=Fehler+abs(BildInfoVector[0].getLinieneintrag(x,z)-reales_Set[permutation[x]-1][z]);
+                int test1=BildInfoVector[Bildlaufvariable].getLinieneintrag(x,z);
+                int test2=reales_Set[permutation[x]-1][z];// permutation[5] gibt es z.B. gar nicht!!! FEHLER!!!!!!
+                                                            // combination-Vektor und permutation-Vektor beide mit 0 anfangen lassen (damit ich mir das (-1) sparen kann!!!!
+                int test3= BildInfoVector[Bildlaufvariable].getLinieneintrag(x,z)-reales_Set[permutation[x]-1][z];
+                //int test4= permutation[x];
+                Fehler=Fehler+abs(BildInfoVector[Bildlaufvariable].getLinieneintrag(x,z)-reales_Set[permutation[x]-1][z]);
             }
         }
-        Fehler=Fehler/BildInfoVector[0].getLinienanzahl();//Mittelwert
-        //Fehlervec.push_back(Fehler);
+        Fehler=Fehler/BildInfoVector[Bildlaufvariable].getLinienanzahl();//Mittelwert
 
-        // Kleinsten Wert des Vektors Fehlervec bestimmen
-        //float klein=kleinsterFehler;
-        if(Fehler < kleinsterFehler)
+        if(Fehler < BildInfoVector[Bildlaufvariable].getFehler())
         {
-            //float blub3=kleinsterFehler;
-            kleinsterFehler=Fehler;
-            BildInfoVector[0].setFehler(kleinsterFehler);//berechneter kleinster Gesamtfehler für Set
+            BildInfoVector[Bildlaufvariable].setFehler(Fehler);// es wird jedes Mal überprüft ob aktueller Fehler kleiner ist als alle vorigen (nur dann wird er an Objekt übergeben)
         }
-        kleinsterFehler=kleinsterFehler;
-        float testx=BildInfoVector[0].getFehler();
+        float testx=BildInfoVector[Bildlaufvariable].getFehler();
         int blub=0;
     }
-
-    else if(BildInfoVector[0].getLinienanzahl() > reales_Set.size())//Stelle des Bildinfovectors muss fortlaufend sein (muss noch geändert werden)
+    // wenn gleiche Anzahl an Linien (==) dann ist es egal welche Schleife! (hier die zweite genommen)
+    else if(BildInfoVector[Bildlaufvariable].getLinienanzahl() >= reales_Set.size())//Stelle des Bildinfovectors muss fortlaufend sein (muss noch geändert werden)
     {
         //Fehler berechnen und in Bildobjekt speichern
-        for(int x=0; x<BildInfoVector[0].getLinienanzahl();x++)
+        for(int x=0; x<BildInfoVector[Bildlaufvariable].getLinienanzahl();x++)
         {
             for(int z=0;z<4;z++)//Alle 4 Parameter durchlaufen
             {
-                Fehler=Fehler+BildInfoVector[0].getLinieneintrag(x,z)-reales_Set[permutation[x]][z];
+                //int m = permutation[x];
+                //Fehler=Fehler+abs(reales_Set(x,z) - BildInfoVector[Bildlaufvariable].getLinieneintrag(*permutation[x]-1,z));
             }
         }
-        Fehler=Fehler/BildInfoVector[0].getLinienanzahl();//Mittelwert
-        BildInfoVector[0].setFehler(Fehler);//berechneter Gesamtfehler für Set
+        Fehler=Fehler/BildInfoVector[Bildlaufvariable].getLinienanzahl();//Mittelwert
+        if(Fehler < BildInfoVector[Bildlaufvariable].getFehler())
+        {
+            BildInfoVector[Bildlaufvariable].setFehler(Fehler);
+        }
     }
-
 }
 
 void print_combinations() {
@@ -209,21 +208,21 @@ int main ( int argc, char *argv[] )
     reales_Set[0].push_back(350); reales_Set[0].push_back(400); reales_Set[0].push_back(-20); reales_Set[0].push_back(240);
 
 
-    for (int AnzahlBilder=0; AnzahlBilder<BildInfoVector.size();AnzahlBilder++)
+    for (Bildlaufvariable=0; Bildlaufvariable<BildInfoVector.size();Bildlaufvariable++)
     {
         int n, k;
         // Größen des synthetischen Linienvektors und des reales_Set-Vektors vergleichen
-        if(BildInfoVector[AnzahlBilder].getLinienanzahl() > reales_Set.size())
+        if(BildInfoVector[Bildlaufvariable].getLinienanzahl() > reales_Set.size())
         {
-            n=BildInfoVector[AnzahlBilder].getLinienanzahl();
+            n=BildInfoVector[Bildlaufvariable].getLinienanzahl();
             k=reales_Set.size();
         }
-        else if (BildInfoVector[AnzahlBilder].getLinienanzahl() < reales_Set.size())
+        else if (BildInfoVector[Bildlaufvariable].getLinienanzahl() < reales_Set.size())
         {
             n=reales_Set.size();
-            k=BildInfoVector[AnzahlBilder].getLinienanzahl();
+            k=BildInfoVector[Bildlaufvariable].getLinienanzahl();
         }
-        else if (BildInfoVector[AnzahlBilder].getLinienanzahl() == reales_Set.size())
+        else if (BildInfoVector[Bildlaufvariable].getLinienanzahl() == reales_Set.size())
         {
             n=reales_Set.size(); // beide gleich groß!
             k=reales_Set.size();

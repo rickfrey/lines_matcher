@@ -50,7 +50,8 @@ float Bildinfo::getFehler()
 
 Bildinfo::Bildinfo()
 {
-    this->Zeilenanzahl=0;//Am Anfang hat Vektor 0 Zeilen
+    this->Zeilenanzahl=0;   // Am Anfang hat Vektor 0 Zeilen
+    this->Fehler=100000;    // Initialisierung von Fehler (muss auf jeden Fall größer sein als die erwarteten Werte)
 }
 Bildinfo::~Bildinfo()
 {}
