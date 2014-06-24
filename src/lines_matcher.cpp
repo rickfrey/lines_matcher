@@ -18,7 +18,7 @@ vector<int> people;
 vector<int> combination;
 vector<vector <int> > reales_Set;
 std::vector<Bildinfo> BildInfoVector;   // Vektor vom Typ Bildinfo!!!!! an jeder Stelle des
-                                        // Vektors steht eine Objekt von Bildinfo!!!!
+// Vektors steht eine Objekt von Bildinfo!!!!
 int Bildlaufvariable;
 
 using namespace std;
@@ -33,7 +33,7 @@ void error_calc(vector<int> permutation){
     // statischer Vektor ist immer der kleinere!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     //Fall: synthetisches Set ist kleiner:
-    float Fehler;
+    float Fehler=0;
     //vector<float> Fehlervec;// Fehlervektor!! Fehler für jede Setkombination speichern, niedrigsten Wert an Objekt übergeben!
     if(BildInfoVector[Bildlaufvariable].getLinienanzahl() < reales_Set.size())//Stelle des Bildinfovectors muss fortlaufend sein (muss noch geändert werden)
     {
@@ -43,18 +43,21 @@ void error_calc(vector<int> permutation){
             for(int z=0;z<4;z++)//Alle 4 Parameter durchlaufen
             {
                 int test1=BildInfoVector[Bildlaufvariable].getLinieneintrag(x,z);
-                int test2=reales_Set[permutation[x]-1][z];// permutation[5] gibt es z.B. gar nicht!!! FEHLER!!!!!!
-                                                            // combination-Vektor und permutation-Vektor beide mit 0 anfangen lassen (damit ich mir das (-1) sparen kann!!!!
-                int test3= BildInfoVector[Bildlaufvariable].getLinieneintrag(x,z)-reales_Set[permutation[x]-1][z];
+                int test2=reales_Set[permutation[x]][z];// permutation[5] gibt es z.B. gar nicht!!! FEHLER!!!!!!
+                // combination-Vektor und permutation-Vektor beide mit 0 anfangen lassen (damit ich mir das (-1) sparen kann!!!!
+                int test3= BildInfoVector[Bildlaufvariable].getLinieneintrag(x,z)-reales_Set[permutation[x]][z];
                 //int test4= permutation[x];
-                Fehler=Fehler+abs(BildInfoVector[Bildlaufvariable].getLinieneintrag(x,z)-reales_Set[permutation[x]-1][z]);
+                Fehler=Fehler+abs(BildInfoVector[Bildlaufvariable].getLinieneintrag(x,z)-reales_Set[permutation[x]][z]);
+                int blub44=0;
             }
         }
-        Fehler=Fehler/BildInfoVector[Bildlaufvariable].getLinienanzahl();//Mittelwert
-
+        Fehler=Fehler/BildInfoVector[Bildlaufvariable].getLinienanzahl();//Mittelwert für die aktuelle Kombination
+        int blub22=BildInfoVector[Bildlaufvariable].getFehler();
+        int blub23=0;
         if(Fehler < BildInfoVector[Bildlaufvariable].getFehler())
         {
             BildInfoVector[Bildlaufvariable].setFehler(Fehler);// es wird jedes Mal überprüft ob aktueller Fehler kleiner ist als alle vorigen (nur dann wird er an Objekt übergeben)
+            int blub34=0;
         }
         float testx=BildInfoVector[Bildlaufvariable].getFehler();
         int blub=0;
@@ -63,15 +66,15 @@ void error_calc(vector<int> permutation){
     else if(BildInfoVector[Bildlaufvariable].getLinienanzahl() >= reales_Set.size())//Stelle des Bildinfovectors muss fortlaufend sein (muss noch geändert werden)
     {
         //Fehler berechnen und in Bildobjekt speichern
-        for(int x=0; x<BildInfoVector[Bildlaufvariable].getLinienanzahl();x++)
+        for(int x=0; x<reales_Set.size();x++)// Da reales_Set kleiner ist als Bildinfovektor[xy] nur bis reales_Set.size()!!!
         {
             for(int z=0;z<4;z++)//Alle 4 Parameter durchlaufen
             {
-                //int m = permutation[x];
-                //Fehler=Fehler+abs(reales_Set(x,z) - BildInfoVector[Bildlaufvariable].getLinieneintrag(*permutation[x]-1,z));
+                Fehler=Fehler + abs(reales_Set[x][z] - BildInfoVector[Bildlaufvariable].getLinieneintrag(permutation[x],z) );//m=permutation[x] getLinieneintrag(m,z)
+                //int blub33=0;
             }
         }
-        Fehler=Fehler/BildInfoVector[Bildlaufvariable].getLinienanzahl();//Mittelwert
+        Fehler=Fehler/reales_Set.size();//Mittelwert
         if(Fehler < BildInfoVector[Bildlaufvariable].getFehler())
         {
             BildInfoVector[Bildlaufvariable].setFehler(Fehler);
@@ -205,7 +208,7 @@ int main ( int argc, char *argv[] )
     reales_Set[1].push_back(100); reales_Set[1].push_back(400); reales_Set[1].push_back(28); reales_Set[1].push_back(220);
     reales_Set[2].push_back(200); reales_Set[2].push_back(300); reales_Set[2].push_back(90); reales_Set[2].push_back(50);
     reales_Set[3].push_back(350); reales_Set[3].push_back(300); reales_Set[3].push_back(-15); reales_Set[3].push_back(230);
-    reales_Set[0].push_back(350); reales_Set[0].push_back(400); reales_Set[0].push_back(-20); reales_Set[0].push_back(240);
+    reales_Set[4].push_back(350); reales_Set[4].push_back(400); reales_Set[4].push_back(-20); reales_Set[4].push_back(240);
 
 
     for (Bildlaufvariable=0; Bildlaufvariable<BildInfoVector.size();Bildlaufvariable++)
@@ -230,11 +233,12 @@ int main ( int argc, char *argv[] )
         cout<<"k= "<<k<<endl;
         cout <<"n= "<<n<<endl;
 
-        for (int i = 0; i < n; ++i) { people.push_back(i+1);} // 1. Hier wird lediglich Vektor people mit 1,2,3,4...bis n gefüllt
+        for (int i = 0; i < n; ++i) { people.push_back(i);} // 1. Hier wird lediglich Vektor people mit 1,2,3,4...bis n gefüllt NEIN: JEZT MIT 0,1,2...n
         go(0, k); // 2. Aufruf der Funktion go mit k als Parameter
     }
     //TEST:
     cout<< "Fehler des ersten sets: " <<BildInfoVector[0].getFehler()<<endl;
+    cout<< "Fehler des zweiten sets: "<<BildInfoVector[1].getFehler()<<endl;
 
     return 0;
 }
