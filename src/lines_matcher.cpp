@@ -10,6 +10,8 @@
 #include <QStringList>
 #include <QTextStream>
 #include <QFile>
+#include <algorithm>
+#include <stdlib.h>
 #include"bildinfo.h"
 
 vector<int> people;
@@ -30,19 +32,50 @@ void error_calc(vector<int> permutation){
     // statischer Vektor ist immer der kleinere!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     //Fall: synthetisches Set ist kleiner:
-    int Fehler=0;
+    float Fehler;
+    float kleinsterFehler=100000;
+    //vector<float> Fehlervec;// Fehlervektor!! Fehler für jede Setkombination speichern, niedrigsten Wert an Objekt übergeben!
     if(BildInfoVector[0].getLinienanzahl() < reales_Set.size())//Stelle des Bildinfovectors muss fortlaufend sein (muss noch geändert werden)
     {
         //Fehler berechnen und in Bildobjekt speichern
-        for(int x=0; x<BildInfoVector[0].getLinienanzahl;x++)
+        for(int x=0; x<BildInfoVector[0].getLinienanzahl();x++)
         {
             for(int z=0;z<4;z++)//Alle 4 Parameter durchlaufen
             {
-                Fehler=Fehler+BildInfoVector[0].getLinieneintrag[x][z]-reales_Set[permutation[x]][z]
+                int test1=BildInfoVector[0].getLinieneintrag(x,z);
+                int test2=reales_Set[permutation[x]-1][z];
+                int test3= BildInfoVector[0].getLinieneintrag(x,z)-reales_Set[permutation[x]-1][z];
+                Fehler=Fehler+abs(BildInfoVector[0].getLinieneintrag(x,z)-reales_Set[permutation[x]-1][z]);
             }
         }
         Fehler=Fehler/BildInfoVector[0].getLinienanzahl();//Mittelwert
-        BildInfoVector[0].setFehler=Fehler;//berechneter Gesamtfehler für Set
+        //Fehlervec.push_back(Fehler);
+
+        // Kleinsten Wert des Vektors Fehlervec bestimmen
+        //float klein=kleinsterFehler;
+        if(Fehler < kleinsterFehler)
+        {
+            //float blub3=kleinsterFehler;
+            kleinsterFehler=Fehler;
+            BildInfoVector[0].setFehler(kleinsterFehler);//berechneter kleinster Gesamtfehler für Set
+        }
+        kleinsterFehler=kleinsterFehler;
+        float testx=BildInfoVector[0].getFehler();
+        int blub=0;
+    }
+
+    else if(BildInfoVector[0].getLinienanzahl() > reales_Set.size())//Stelle des Bildinfovectors muss fortlaufend sein (muss noch geändert werden)
+    {
+        //Fehler berechnen und in Bildobjekt speichern
+        for(int x=0; x<BildInfoVector[0].getLinienanzahl();x++)
+        {
+            for(int z=0;z<4;z++)//Alle 4 Parameter durchlaufen
+            {
+                Fehler=Fehler+BildInfoVector[0].getLinieneintrag(x,z)-reales_Set[permutation[x]][z];
+            }
+        }
+        Fehler=Fehler/BildInfoVector[0].getLinienanzahl();//Mittelwert
+        BildInfoVector[0].setFehler(Fehler);//berechneter Gesamtfehler für Set
     }
 
 }
@@ -201,5 +234,8 @@ int main ( int argc, char *argv[] )
         for (int i = 0; i < n; ++i) { people.push_back(i+1);} // 1. Hier wird lediglich Vektor people mit 1,2,3,4...bis n gefüllt
         go(0, k); // 2. Aufruf der Funktion go mit k als Parameter
     }
+    //TEST:
+    cout<< "Fehler des ersten sets: " <<BildInfoVector[0].getFehler()<<endl;
+
     return 0;
 }
