@@ -237,8 +237,9 @@ int main ( int argc, char *argv[] )
         go(0, k); // 2. Aufruf der Funktion go mit k als Parameter
     }
     //TEST:
-    cout<< "Fehler des ersten sets: " <<BildInfoVector[0].getFehler()<<endl;
-    cout<< "Fehler des zweiten sets: "<<BildInfoVector[1].getFehler()<<endl;
+    cout<< "Geringster durchschnittlicher Fehler (pro Linie) des ersten sets: " <<BildInfoVector[0].getFehler()<<endl;
+    cout<< "Geringster durchschnittlicher Fehler (pro Linie) des zweiten sets: "<<BildInfoVector[1].getFehler()<<endl;
+    cout<< "Geringster durchschnittlicher Fehler (pro Linie) des dritten sets: "<<BildInfoVector[2].getFehler()<<endl;
 
     return 0;
 }
