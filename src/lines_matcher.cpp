@@ -82,7 +82,7 @@ void error_calc(vector<int> permutation){
     }
 }
 
-void print_combinations() {
+void calc_all_permutations() {
     vector<int> permutation;
     static int count = 0;
     error_calc(combination);// WICHTIG!!! 1. Durchlauf mit sortierter Permutation!!!
@@ -106,16 +106,16 @@ void print_combinations() {
     }
 }
 
-void go(int offset, int k) {
+void calc_all_combinations(int offset, int k) {
     if (k == 0) { //
-        print_combinations();
+        calc_all_permutations();
         return;
     }
     for (int i = offset; i <= people.size() - k; ++i) { // 3. Schleife von 0 bis (n-k)
         combination.push_back(people[i]); // 4. Vektor "combination": i-te Stelle wird mit people[i] gefüllt
         //cout<<"Test: people["<<i<<"]= "<<people[i]<<endl;
         //cout<<"Test: combination["<<i<<"]= "<<combination[i]<<endl;
-        go(i+1, k-1);
+        calc_all_combinations(i+1, k-1);
         combination.pop_back(); // pop_back verkleinert Vektor um eine Stelle
     }
 }
@@ -234,7 +234,7 @@ int main ( int argc, char *argv[] )
         cout <<"n= "<<n<<endl;
 
         for (int i = 0; i < n; ++i) { people.push_back(i);} // 1. Hier wird lediglich Vektor people mit 1,2,3,4...bis n gefüllt NEIN: JEZT MIT 0,1,2...n
-        go(0, k); // 2. Aufruf der Funktion go mit k als Parameter
+        calc_all_combinations(0, k); // 2. Aufruf der Funktion calc_all_combinations mit k als Parameter
     }
     //TEST:
     cout<< "Geringster durchschnittlicher Fehler (pro Linie) des ersten sets: " <<BildInfoVector[0].getFehler()<<endl;
