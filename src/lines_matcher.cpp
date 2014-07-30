@@ -3,8 +3,8 @@
 #include <string>
 #include <iostream>
 #include <fstream>
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
+//#include <opencv2/highgui/highgui.hpp>
+//#include <opencv2/imgproc/imgproc.hpp>
 #include <sstream>
 #include <QString>
 #include <QStringList>
@@ -122,36 +122,30 @@ void calc_all_combinations(int offset, int k) {
 
 int main ( int argc, char *argv[] )
 {
+    // Textdatei öffnen
     QFile file("Eigenschaften.txt");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
         return -1;
 
-    //int k =0;
+    // So lange Daten in Datei wird jeweils eine ausgelesen und Anzahl der Spalten in "numOfCol" gespeichert
     QTextStream in(&file);
-    while (!in.atEnd()) {
-
-        //So lange Daten in Datei
+    while (!in.atEnd())
+    {
         QString line = in.readLine();
         int numOfCol = line.count(QLatin1Char(' '));
         numOfCol++; // Anzahl der Spalten = Anzahl Leerzeichen +1
 
-        //////////////////////////
-        // Bis hier wurde eine Zeile eingelesen und die Anzahl der Spalten in der Variablen "numOfCol" gespeichert
-        /////////////////////////
-
-        /////////////////////////
         // Wenn 6 Spalten: Objekt anlegen und Zeile in Posenvektor speichern:
-        ////////////////////////
         if(numOfCol==6)
         {
-            //   QString Objektname= QString("Bild%1").arg(k);
-            // k++;
-            Bildinfo bi; //neues Bildobjekt anlegen
-            vector<int> posenvektor;//hier werden die 6 DoF reingespeichert
+            //neues Bildobjekt anlegen
+            Bildinfo bi;
+            vector<int> posenvektor;
             QStringList list1 = line.split(" ");
             for(int i = 0; i < list1.size(); ++i)
             {
-                posenvektor.push_back(list1.at(i).toInt()); // Eingelesene Elemente werden in posenvektor geschrieben (und gleichzeitig zu int convertiert)
+                // Eingelesene Elemente werden in posenvektor geschrieben (und gleichzeitig zu int convertiert)
+                posenvektor.push_back(list1.at(i).toInt());
             }
             bi.setPosenvektor(posenvektor); // posenvektor wird an Objekt an Posenvektor von Objekt bi übergeben
             //int Poseneintrag=bi.getPoseneintrag();
@@ -183,10 +177,10 @@ int main ( int argc, char *argv[] )
     file.close();
 
     int test=BildInfoVector[0].getPoseneintrag(0);
-    cout<<"Poseneintrag[0]= "<<test;
+    cout<<"Poseneintrag[0]= "<<test<<endl;
     int test2=BildInfoVector[1].getLinieneintrag(3,2);
     cout<<"Linieneintrag[3][2]= "<<test2<<endl;
-    cout<<"Linienanzahl= "<<BildInfoVector[0].getLinienanzahl();
+    cout<<"Linienanzahl= "<<BildInfoVector[0].getLinienanzahl()<<endl;
 
     /***************************
       1. k und n ermitteln
@@ -198,18 +192,23 @@ int main ( int argc, char *argv[] )
       *************************/
 
     // reales Linienset laden
-
-    for(int i = 0; i < 5; i++)// es werden 5 Zeilen reserviert
+    for(int i = 0; i < 12; i++)// es werden 12 Zeilen reserviert
     {
         vector<int> row;
         reales_Set.push_back(row);
     }
-    reales_Set[0].push_back(100); reales_Set[0].push_back(300); reales_Set[0].push_back(25); reales_Set[0].push_back(200);
-    reales_Set[1].push_back(100); reales_Set[1].push_back(400); reales_Set[1].push_back(28); reales_Set[1].push_back(220);
-    reales_Set[2].push_back(200); reales_Set[2].push_back(300); reales_Set[2].push_back(90); reales_Set[2].push_back(50);
-    reales_Set[3].push_back(350); reales_Set[3].push_back(300); reales_Set[3].push_back(-15); reales_Set[3].push_back(230);
-    reales_Set[4].push_back(350); reales_Set[4].push_back(400); reales_Set[4].push_back(-20); reales_Set[4].push_back(240);
-
+    reales_Set[0].push_back(490); reales_Set[0].push_back(168); reales_Set[0].push_back(6); reales_Set[0].push_back(444);
+    reales_Set[1].push_back(483); reales_Set[1].push_back(351); reales_Set[1].push_back(12); reales_Set[1].push_back(427);
+    reales_Set[2].push_back(276); reales_Set[2].push_back(299); reales_Set[2].push_back(-87); reales_Set[2].push_back(198);
+    reales_Set[3].push_back(107); reales_Set[3].push_back(225); reales_Set[3].push_back(-84); reales_Set[3].push_back(163);
+    reales_Set[4].push_back(195); reales_Set[4].push_back(352); reales_Set[4].push_back(-29); reales_Set[4].push_back(188);
+    reales_Set[4].push_back(697); reales_Set[4].push_back(222); reales_Set[4].push_back(83); reales_Set[4].push_back(161);
+    reales_Set[4].push_back(182); reales_Set[4].push_back(168); reales_Set[4].push_back(-16); reales_Set[4].push_back(189);
+    reales_Set[4].push_back(59); reales_Set[4].push_back(314); reales_Set[4].push_back(9); reales_Set[4].push_back(108);
+    reales_Set[4].push_back(49); reales_Set[4].push_back(146); reales_Set[4].push_back(4); reales_Set[4].push_back(98);
+    reales_Set[4].push_back(739); reales_Set[4].push_back(145); reales_Set[4].push_back(-8); reales_Set[4].push_back(56);
+    reales_Set[4].push_back(333); reales_Set[4].push_back(386); reales_Set[4].push_back(12); reales_Set[4].push_back(117);
+    reales_Set[4].push_back(726); reales_Set[4].push_back(314); reales_Set[4].push_back(-17); reales_Set[4].push_back(83);
 
     for (Bildlaufvariable=0; Bildlaufvariable<BildInfoVector.size();Bildlaufvariable++)
     {
@@ -241,5 +240,22 @@ int main ( int argc, char *argv[] )
     cout<< "Geringster durchschnittlicher Fehler (pro Linie) des zweiten sets: "<<BildInfoVector[1].getFehler()<<endl;
     cout<< "Geringster durchschnittlicher Fehler (pro Linie) des dritten sets: "<<BildInfoVector[2].getFehler()<<endl;
 
-    return 0;
+    // Suchen des Objekts mit kleinstem Fehler
+    int SetMitKleinstemFehler = 0, relativerFehler = 1000;
+    for(int m = 0; m <= BildInfoVector.size(); m++)
+    {
+        if(BildInfoVector[m].getFehler() < relativerFehler)
+        {
+            relativerFehler = BildInfoVector[m].getFehler();
+            SetMitKleinstemFehler = m;
+        }
+    }
+
+    // Ausgabe der Pose mit dem geringsten Fehler
+    cout << "Set mit geringster Pose ist Set Nummer: " << SetMitKleinstemFehler << std::endl;
+    cout << "Pose: " << endl << "x=" << BildInfoVector[SetMitKleinstemFehler].getPoseneintrag(0) << endl << "y=" << BildInfoVector[SetMitKleinstemFehler].getPoseneintrag(1) << endl;
+    cout << "z=" << BildInfoVector[SetMitKleinstemFehler].getPoseneintrag(2) << endl << "roll=" << BildInfoVector[SetMitKleinstemFehler].getPoseneintrag(3) << endl;
+    cout << "pitch=" << BildInfoVector[SetMitKleinstemFehler].getPoseneintrag(4) << endl << "yaw=" << BildInfoVector[SetMitKleinstemFehler].getPoseneintrag(5) << endl;
+
+            return 0;
 }
