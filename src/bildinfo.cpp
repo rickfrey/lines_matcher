@@ -16,13 +16,13 @@ void Bildinfo::addLinienvektor(vector<int> vektor)
 
 
 }
-void Bildinfo::setPosenvektor(vector<int> vektor)
+void Bildinfo::setPosenvektor(vector<float> vektor)
 {
     this->Posenvektor=vektor;
 }
 
 
-int Bildinfo::getPoseneintrag(int eintrag)
+float Bildinfo::getPoseneintrag(int eintrag)
 {
     return this->Posenvektor[eintrag];
 }

@@ -12,7 +12,7 @@ private:
     //int Linienarray[a];
 //    std::vector<int> Pose(6);
     int Zeilenanzahl;
-    vector<int> Posenvektor;
+    vector<float> Posenvektor;
     vector< vector<int> > Linienvektor;
     float Fehler;
 
@@ -22,9 +22,9 @@ public:
 
 
     void addLinienvektor(vector<int> vektor);
-    void setPosenvektor(vector<int> vektor);
+    void setPosenvektor(vector<float> vektor);
     int getLinienanzahl();
-    int getPoseneintrag(int eintrag);
+    float getPoseneintrag(int eintrag);
     int getLinieneintrag(int liniennummer, int parameter);
     void setFehler(float Fehler);
     float getFehler();
