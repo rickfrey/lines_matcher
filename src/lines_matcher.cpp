@@ -140,12 +140,12 @@ int main ( int argc, char *argv[] )
         {
             //neues Bildobjekt anlegen
             Bildinfo bi;
-            vector<int> posenvektor;
+            vector<float> posenvektor;
             QStringList list1 = line.split(" ");
             for(int i = 0; i < list1.size(); ++i)
             {
                 // Eingelesene Elemente werden in posenvektor geschrieben (und gleichzeitig zu int convertiert)
-                posenvektor.push_back(list1.at(i).toInt());
+                posenvektor.push_back(list1.at(i).toFloat());
             }
             bi.setPosenvektor(posenvektor); // posenvektor wird an Objekt an Posenvektor von Objekt bi übergeben
             //int Poseneintrag=bi.getPoseneintrag();
@@ -234,6 +234,7 @@ int main ( int argc, char *argv[] )
 
         for (int i = 0; i < n; ++i) { people.push_back(i);} // 1. Hier wird lediglich Vektor people mit 1,2,3,4...bis n gefüllt NEIN: JEZT MIT 0,1,2...n
         calc_all_combinations(0, k); // 2. Aufruf der Funktion calc_all_combinations mit k als Parameter
+        people.clear();
     }
     //TEST:
     cout<< "Geringster durchschnittlicher Fehler (pro Linie) des ersten sets: " <<BildInfoVector[0].getFehler()<<endl;
@@ -284,6 +285,7 @@ std::vector<Bildinfo> BildInfoVector;   // Vektor vom Typ Bildinfo!!!!! an jeder
 int Bildlaufvariable;
 using namespace std;
 //typedef <vector<vector<double> > Vektordef;
+
 void error_calc(vector<int> permutation){
     // der übergebene Vektor permutation stellt die Beziehung zwischen den Vektoren
     // BildInfoVec und reales_Set her
@@ -300,25 +302,25 @@ void error_calc(vector<int> permutation){
         {
             for(int z=0;z<4;z++)//Alle 4 Parameter durchlaufen
             {
-                int test1=BildInfoVector[Bildlaufvariable].getLinieneintrag(x,z);
-                int test2=reales_Set[permutation[x]][z];// permutation[5] gibt es z.B. gar nicht!!! FEHLER!!!!!!
+                //int test1=BildInfoVector[Bildlaufvariable].getLinieneintrag(x,z);
+                //int test2=reales_Set[permutation[x]][z];// permutation[5] gibt es z.B. gar nicht!!! FEHLER!!!!!!
                 // combination-Vektor und permutation-Vektor beide mit 0 anfangen lassen (damit ich mir das (-1) sparen kann!!!!
-                int test3= BildInfoVector[Bildlaufvariable].getLinieneintrag(x,z)-reales_Set[permutation[x]][z];
+                //int test3= BildInfoVector[Bildlaufvariable].getLinieneintrag(x,z)-reales_Set[permutation[x]][z];
                 //int test4= permutation[x];
                 Fehler=Fehler+abs(BildInfoVector[Bildlaufvariable].getLinieneintrag(x,z)-reales_Set[permutation[x]][z]);
-                int blub44=0;
+                //int blub44=0;
             }
         }
         Fehler=Fehler/BildInfoVector[Bildlaufvariable].getLinienanzahl();//Mittelwert für die aktuelle Kombination
-        int blub22=BildInfoVector[Bildlaufvariable].getFehler();
-        int blub23=0;
+        //int blub22=BildInfoVector[Bildlaufvariable].getFehler();
+        //int blub23=0;
         if(Fehler < BildInfoVector[Bildlaufvariable].getFehler())
         {
             BildInfoVector[Bildlaufvariable].setFehler(Fehler);// es wird jedes Mal überprüft ob aktueller Fehler kleiner ist als alle vorigen (nur dann wird er an Objekt übergeben)
-            int blub34=0;
+            //int blub34=0;
         }
         float testx=BildInfoVector[Bildlaufvariable].getFehler();
-        int blub=0;
+        //int blub=0;
     }
     // wenn gleiche Anzahl an Linien (==) dann ist es egal welche Schleife! (hier die zweite genommen)
     else if(BildInfoVector[Bildlaufvariable].getLinienanzahl() >= reales_Set.size())//Stelle des Bildinfovectors muss fortlaufend sein (muss noch geändert werden)
@@ -350,15 +352,15 @@ void calc_all_permutations() {
     cout << "] " << endl;
 
     while(next_permutation(combination.begin(), combination.end()) ){
-        cout<<"[";
+        //cout<<"[";
         for(vector<int>::iterator it = combination.begin(); it != combination.end(); it++)
         {
-            cout << *it << " ";
+            //cout << *it << " ";
             permutation.push_back(*it); // Hier wird der Wert des Iterators (Zeigers) in permutation gespeichert
         }
         error_calc(permutation); // Vektor permutation wird an Funktion error_calc übergeben
         permutation.clear();
-        cout << "]" << endl;
+        //cout << "]" << endl;
     }
 }
 void calc_all_combinations(int offset, int k) {
@@ -368,11 +370,13 @@ void calc_all_combinations(int offset, int k) {
     }
     for (int i = offset; i <= people.size() - k; ++i) { // 3. Schleife von 0 bis (n-k)
         combination.push_back(people[i]); // 4. Vektor "combination": i-te Stelle wird mit people[i] gefüllt
+        vector<int> blub = combination;
         //cout<<"Test: people["<<i<<"]= "<<people[i]<<endl;
         //cout<<"Test: combination["<<i<<"]= "<<combination[i]<<endl;
         calc_all_combinations(i+1, k-1);
         combination.pop_back(); // pop_back verkleinert Vektor um eine Stelle
     }
+    // In People sind immernoch die n Zahlen des vorigen sets! Nach allen Kombinationen muss people gelöscht und neu eingelesen werden!!!
 }
 int main ( int argc, char *argv[] )
 {
@@ -478,16 +482,34 @@ int main ( int argc, char *argv[] )
         cout <<"n= "<<n<<endl;
         for (int i = 0; i < n; ++i) {
             people.push_back(i);
-            int testblubblub = people[i];
-            cout << "Vektor people: " << people[i];
+            //int testblubblub = people[i];
+            //cout << "Vektor people: " << people[i];
         } // 1. Hier wird lediglich Vektor people mit 1,2,3,4...bis n gefüllt NEIN: JEZT MIT 0,1,2...n
         calc_all_combinations(0, k); // 2. Aufruf der Funktion calc_all_combinations mit k als Parameter
+        people.clear();
     }
     //TEST:
-    cout<< "Geringster durchschnittlicher Fehler (pro Linie) des ersten sets: " <<BildInfoVector[0].getFehler()<<endl;
-    cout<< "Geringster durchschnittlicher Fehler (pro Linie) des zweiten sets: "<<BildInfoVector[1].getFehler()<<endl;
-    cout<< "Geringster durchschnittlicher Fehler (pro Linie) des dritten sets: "<<BildInfoVector[2].getFehler()<<endl;
+//    cout<< "Geringster durchschnittlicher Fehler (pro Linie) des ersten sets: " <<BildInfoVector[0].getFehler()<<endl;
+//    cout<< "Geringster durchschnittlicher Fehler (pro Linie) des zweiten sets: "<<BildInfoVector[1].getFehler()<<endl;
+//    cout<< "Geringster durchschnittlicher Fehler (pro Linie) des dritten sets: "<<BildInfoVector[2].getFehler()<<endl;
+
+    // Suchen des Objekts mit kleinstem Fehler
+    int SetMitKleinstemFehler = 0, relativerFehler = 1000;
+    for(int m = 0; m <= BildInfoVector.size(); m++)
+    {
+        if(BildInfoVector[m].getFehler() < relativerFehler)
+        {
+            relativerFehler = BildInfoVector[m].getFehler();
+            SetMitKleinstemFehler = m;
+        }
+    }
+
+    // Ausgabe der Pose mit dem geringsten Fehler
+    cout << "Set mit geringster Pose ist Set Nummer: " << SetMitKleinstemFehler << std::endl;
+    cout << "Pose: " << endl << "x=" << BildInfoVector[SetMitKleinstemFehler].getPoseneintrag(0) << endl << "y=" << BildInfoVector[SetMitKleinstemFehler].getPoseneintrag(1) << endl;
+    cout << "z=" << BildInfoVector[SetMitKleinstemFehler].getPoseneintrag(2) << endl << "roll=" << BildInfoVector[SetMitKleinstemFehler].getPoseneintrag(3) << endl;
+    cout << "pitch=" << BildInfoVector[SetMitKleinstemFehler].getPoseneintrag(4) << endl << "yaw=" << BildInfoVector[SetMitKleinstemFehler].getPoseneintrag(5) << endl;
+
     return 0;
 }
-
 
