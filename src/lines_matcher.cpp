@@ -286,6 +286,8 @@ int Bildlaufvariable;
 using namespace std;
 //typedef <vector<vector<double> > Vektordef;
 
+// Ohne Permutationen!
+
 void error_calc(vector<int> permutation){
     // der übergebene Vektor permutation stellt die Beziehung zwischen den Vektoren
     // BildInfoVec und reales_Set her
