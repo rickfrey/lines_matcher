@@ -287,6 +287,7 @@ using namespace std;
 //typedef <vector<vector<double> > Vektordef;
 
 // Ohne Permutationen!
+// blub!!!!
 
 void error_calc(vector<int> permutation){
     // der übergebene Vektor permutation stellt die Beziehung zwischen den Vektoren
