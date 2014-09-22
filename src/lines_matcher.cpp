@@ -25,6 +25,8 @@ std::vector<Bildinfo> BildInfoVector;   // Vektor vom Typ Bildinfo!!!!! an jeder
 int Bildlaufvariable;
 QTime myTimer;
 QTime myTimer2;
+QTime Fehlerberechnungszeit;
+QTime Suchzeit;
 using namespace std;
 //typedef <vector<vector<double> > Vektordef;
 
@@ -41,7 +43,7 @@ int lmax = sqrt( pow(Rxi,2) + pow(Reta,2) );
 // Der Vektor "combination" stellt die Beziehung zwischen den Vektoren "BildInfoVec" und "reales_Set" her
 // "statischer" Vektor ist immer der kleinere!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 void error_calc(){
-    myTimer.restart();
+    //myTimer.restart();
 
     float Fehler = 0, FehlerTheta=0, FehlerXi=0, FehlerEta=0, FehlerL=0;
 
@@ -160,6 +162,9 @@ void calc_all_combinations(int offset, int k) {
 
 int main ( int argc, char *argv[] )
 {
+    // Timer für die Berechnung der Gütewerte starten
+    Fehlerberechnungszeit.start();
+
     // Textdatei öffnen
     QFile file("TestLinesmatcher.txt");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -240,7 +245,7 @@ int main ( int argc, char *argv[] )
     cout << "Starting Combinations..." << endl;
     for (Bildlaufvariable=0; Bildlaufvariable<BildInfoVector.size();Bildlaufvariable++)
     {
-        myTimer2.restart();
+        //myTimer2.restart();
         int n, k;
 
         if(BildInfoVector[Bildlaufvariable].getLinienanzahl() > reales_Set.size())
@@ -272,51 +277,40 @@ int main ( int argc, char *argv[] )
         // Aufruf der Funktion calc_all_combinations mit k als Parameter
         calc_all_combinations(0, k);
         people.clear();
-        cout << "Ellapsed " << myTimer2.elapsed() << "\n";
+        //cout << "Ellapsed " << myTimer2.elapsed() << "\n";
 
     }
-    cout << "End Combinations ..";
-    //TEST:
-    //    cout<< "Geringster durchschnittlicher Fehler (pro Linie) des ersten sets: " <<BildInfoVector[0].getFehler()<<endl;
-    //    cout<< "Geringster durchschnittlicher Fehler (pro Linie) des zweiten sets: "<<BildInfoVector[1].getFehler()<<endl;
-    //    cout<< "Geringster durchschnittlicher Fehler (pro Linie) des dritten sets: "<<BildInfoVector[2].getFehler()<<endl;
+    cout << "End Combinations... ";
 
-    // Suchen des Objekts mit kleinstem Fehler
-    int SetMitBestemGuetewert = 0;
-    float relativerFehler = 0;
-    for(int m = 0; m < BildInfoVector.size(); m++)
-    {
-        if(BildInfoVector[m].getFehler() > relativerFehler)
-        {
-            relativerFehler = BildInfoVector[m].getFehler();
-            float guetewert = BildInfoVector[m].getFehler();// kann auskommentiert werden
-            SetMitBestemGuetewert = m;
-            int blub33=0;
-        }
-    }
-    //float blub22 = BildInfoVector[SetMitBestemGuetewert].getFehler();
+    // Stoppen und Ausgeben der Fehlerberechnungszeit
+    cout << endl << "Laufzeit für die Berechnung der Gütewerte: " << Fehlerberechnungszeit.elapsed() << " ms" << endl;
 
-    // Ausgabe der Pose mit dem geringsten Fehler
-    cout << "Set (Pose) mit bestem Gütewert ist Set (Pose) Nummer: " << SetMitBestemGuetewert << std::endl;
-    cout << "Pose: " << endl << "x=" << BildInfoVector[SetMitBestemGuetewert].getPoseneintrag(0) << endl << "y=" << BildInfoVector[SetMitBestemGuetewert].getPoseneintrag(1) << endl;
-    cout << "z=" << BildInfoVector[SetMitBestemGuetewert].getPoseneintrag(2) << endl << "roll=" << BildInfoVector[SetMitBestemGuetewert].getPoseneintrag(3) << endl;
-    cout << "pitch=" << BildInfoVector[SetMitBestemGuetewert].getPoseneintrag(4) << endl << "yaw=" << BildInfoVector[SetMitBestemGuetewert].getPoseneintrag(5) << endl;
-    cout << "relativer Gütewert = " << BildInfoVector[SetMitBestemGuetewert].getFehler() << endl;
+    // Starten des Timers für die Suche der besten Posen
+    Fehlerberechnungszeit.start();
 
-
-    // Die 20 besten Posen ermitteln
-//    std::vector<double> test25;
-//    test25.push_back(3), test25.push_back(1.0), test25.push_back(0.01), test25.push_back(0.2), test25.push_back(0.002), test25.push_back(-1.0), test25.push_back(-20);
+    // Die k besten Posen ermitteln und ausgeben
     std::priority_queue<std::pair< float,int> > q;
     for (int i = 0; i < BildInfoVector.size(); ++i) {
         q.push(std::pair<float, int>(BildInfoVector[i].getFehler(), i));
     }
-    int k = 2; // number of indices we need
+    int k = BildInfoVector.size(); // number of indices we need
     for (int i = 0; i < k; ++i) {
       int ki = q.top().second;
-      std::cout << "index[" << i << "] = " << ki << std::endl;
       q.pop();
+
+
+      // Ausgabe der Posen mit den besten Gütewerten:
+      cout << endl << "Daten der " << i+1 << ".-besten Pose:" << endl;
+      std::cout << "index[" << i << "] = " << ki << std::endl;
+      cout << "Pose: " << BildInfoVector[ki].getPoseneintrag(0) << "; " << BildInfoVector[ki].getPoseneintrag(1) << "; " << BildInfoVector[ki].getPoseneintrag(2) << "; "
+           << BildInfoVector[ki].getPoseneintrag(3) << "; " << BildInfoVector[ki].getPoseneintrag(4) << "; " << BildInfoVector[ki].getPoseneintrag(5) << endl;
+      cout << "Gütewert= " << BildInfoVector[ki].getFehler() << endl;
     }
+
+
+    // Stoppen des Timers für die Suche der besten Posen
+    cout << "Gesamte Laufzeit: " << Fehlerberechnungszeit.elapsed() << " ms" << endl;
+
 
     return 0;
 }
