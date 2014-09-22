@@ -10,6 +10,7 @@
 #include <QStringList>
 #include <QTextStream>
 #include <QFile>
+#include <QTime>
 #include <algorithm>
 #include <stdlib.h>
 #include"bildinfo.h"
@@ -19,13 +20,15 @@ vector<vector <int> > reales_Set;
 std::vector<Bildinfo> BildInfoVector;   // Vektor vom Typ Bildinfo!!!!! an jeder Stelle des
 // Vektors steht eine Objekt von Bildinfo!!!!
 int Bildlaufvariable;
+QTime myTimer;
+QTime myTimer2;
 using namespace std;
 //typedef <vector<vector<double> > Vektordef;
 
 
-
 // In der Funktion error_calc wird der Fehler der aktuellen Kombination der synthetischen Linien mit den realen Linien berechnet
 void error_calc(){
+    myTimer.restart();
     // Der Vektor "combination" stellt die Beziehung zwischen den Vektoren "BildInfoVec" und "reales_Set" her
 
     // "statischer" Vektor ist immer der kleinere!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -86,16 +89,18 @@ void error_calc(){
             BildInfoVector[Bildlaufvariable].setFehler(Fehler);
         }
     }
+
 }
 
 // In dieser Funktion werden nacheinander alle Kombinationen für k Zahlen aus dem Vektor "people" (in dem die Zahlen 0 bis n-1 sind) berechnet
 void calc_all_combinations(int offset, int k) {
+
     if (k == 0) { //
-        cout << "Kombination = [";
-        for(int komb_len = 0; komb_len < combination.size(); komb_len++){
-            cout << combination[komb_len] << " ";
-        }
-        cout << "]" << endl;
+//        cout << "Kombination = [";
+//        for(int komb_len = 0; komb_len < combination.size(); komb_len++){
+//            cout << combination[komb_len] << " ";
+//        }
+//        cout << "]" << endl;
         error_calc();
         return;
     }
@@ -108,7 +113,9 @@ void calc_all_combinations(int offset, int k) {
         combination.pop_back(); // pop_back verkleinert Vektor um eine Stelle
     }
     // In People sind immernoch die n Zahlen des vorigen sets! Nach allen Kombinationen muss people gelöscht und neu eingelesen werden!!!
+
 }
+
 int main ( int argc, char *argv[] )
 {
     // Textdatei öffnen
@@ -187,8 +194,10 @@ int main ( int argc, char *argv[] )
     reales_Set[5].push_back(124); reales_Set[4].push_back(523); reales_Set[4].push_back(-23); reales_Set[4].push_back(856);
 
     // Größen des synthetischen Linienvektors und des reales_Set-Vektors vergleichen um n und k zu bestimmen
+    cout << "Starting Combinations ..";
     for (Bildlaufvariable=0; Bildlaufvariable<BildInfoVector.size();Bildlaufvariable++)
     {
+        myTimer2.restart();
         int n, k;
 
         if(BildInfoVector[Bildlaufvariable].getLinienanzahl() > reales_Set.size())
@@ -209,7 +218,7 @@ int main ( int argc, char *argv[] )
         cout<<"k= "<<k<<endl;
         cout <<"n= "<<n<<endl;
 
-        // Vektor "people" mit 0,2,3,4...bis n-1 füllen
+        // Vektor "people" mit 0,1,2,3,4...bis n-1 füllen
         for (int i = 0; i < n; ++i) {
             people.push_back(i);
             //int testblubblub = people[i];
@@ -219,7 +228,10 @@ int main ( int argc, char *argv[] )
         // Aufruf der Funktion calc_all_combinations mit k als Parameter
         calc_all_combinations(0, k);
         people.clear();
+        cout << "Ellapsed " << myTimer2.elapsed() << "\n";
+
     }
+    cout << "End Combinations ..";
     //TEST:
     //    cout<< "Geringster durchschnittlicher Fehler (pro Linie) des ersten sets: " <<BildInfoVector[0].getFehler()<<endl;
     //    cout<< "Geringster durchschnittlicher Fehler (pro Linie) des zweiten sets: "<<BildInfoVector[1].getFehler()<<endl;
