@@ -14,6 +14,9 @@
 #include <algorithm>
 #include <stdlib.h>
 #include"bildinfo.h"
+#include <cmath>
+#include <queue>
+
 vector<int> people;
 vector<int> combination;
 vector<vector <int> > reales_Set;
@@ -29,26 +32,20 @@ using namespace std;
 /////////////  Werte definieren  /////////////
 
 // Auflösung der Handkamerabilder (Pixel). Hier kann auch das Seitenverhältnis (bzw. senkrechter, waagerechter Kamerasensor) verändert werden
-int Rxi = 2048 , Reta = 1536 ;
+int Rxi = 2048 , Reta = 1536 , Thetamax = 90;
 int lmax = sqrt( pow(Rxi,2) + pow(Reta,2) );
-int blub44 = 3;
-
-
 //////////////////////////////////////////////
 
 
 // In der Funktion error_calc wird der Fehler der aktuellen Kombination der synthetischen Linien mit den realen Linien berechnet
+// Der Vektor "combination" stellt die Beziehung zwischen den Vektoren "BildInfoVec" und "reales_Set" her
+// "statischer" Vektor ist immer der kleinere!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 void error_calc(){
     myTimer.restart();
-    // Der Vektor "combination" stellt die Beziehung zwischen den Vektoren "BildInfoVec" und "reales_Set" her
 
-    // "statischer" Vektor ist immer der kleinere!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    float Fehler = 0, FehlerTheta=0, FehlerXi=0, FehlerEta=0, FehlerL=0;
 
     // Fall 1: synthetisches Set ist kleiner als reales Set:
-    float Fehler=0;
-    int test33 = BildInfoVector[Bildlaufvariable].getLinienanzahl();
-    int test44 = reales_Set.size();
-    //vector<float> Fehlervec;// Fehlervektor!! Fehler für jede Setkombination speichern, niedrigsten Wert an Objekt übergeben!
     if(BildInfoVector[Bildlaufvariable].getLinienanzahl() < reales_Set.size())//Stelle des Bildinfovectors muss fortlaufend sein (muss noch geändert werden)
     {
         //Fehler berechnen und in Bildobjekt speichern
@@ -58,41 +55,39 @@ void error_calc(){
             {
                 // Wert für Theta: ΔΘi/90
                 if(z==0){
-                    Fehler = ( Fehler + abs(BildInfoVector[Bildlaufvariable].getLinieneintrag(x,z) - reales_Set[combination[x]][z]) ) / 90;
+                    FehlerTheta = abs(BildInfoVector[Bildlaufvariable].getLinieneintrag(x,z) - reales_Set[combination[x]][z]);
+                    Fehler = Fehler + (FehlerTheta/90);
                 }
 
                 // Wert für mxi,i: Δmxi,i/Rxi
                 else if(z==1){
-                    Fehler = ( Fehler + abs(BildInfoVector[Bildlaufvariable].getLinieneintrag(x,z) - reales_Set[combination[x]][z]) ) / Rxi;
+                    FehlerXi = abs(BildInfoVector[Bildlaufvariable].getLinieneintrag(x,z) - reales_Set[combination[x]][z]);
+                    Fehler = Fehler + (FehlerXi/Rxi);
                 }
 
                 // Wert für Theta: Δmxi,i/Reta
                 else if(z==2){
-                    Fehler = ( Fehler + abs(BildInfoVector[Bildlaufvariable].getLinieneintrag(x,z) - reales_Set[combination[x]][z]) ) / Reta;
+                    FehlerEta = abs(BildInfoVector[Bildlaufvariable].getLinieneintrag(x,z) - reales_Set[combination[x]][z]);
+                    Fehler = Fehler + (FehlerEta/Reta);
                 }
 
                 // Wert für Theta: Δl,i/lmax
                 else if(z==3){
-                    Fehler = ( Fehler + abs(BildInfoVector[Bildlaufvariable].getLinieneintrag(x,z) - reales_Set[combination[x]][z]) ) / lmax;
+                    FehlerL = abs(BildInfoVector[Bildlaufvariable].getLinieneintrag(x,z) - reales_Set[combination[x]][z]);
+                    Fehler = Fehler + (FehlerL/lmax);
                 }
-
-                //Fehler = Fehler + abs(BildInfoVector[Bildlaufvariable].getLinieneintrag(x,z) - reales_Set[combination[x]][z]);
             }
         }
-
-        // Mittelwert für Fehler dieser Kombination berechnen
-        Fehler=(4-Fehler) / ( 4 * BildInfoVector[Bildlaufvariable].getLinienanzahl() );//Mittelwert für die aktuelle Kombination
-        //int blub22=BildInfoVector[Bildlaufvariable].getFehler();
-        //int blub23=0;
+        // Gütewert Grel berechnen (ab hier ist Fehler eigentlich die falsche Bezeichnung)
+        Fehler = Fehler / BildInfoVector[Bildlaufvariable].getLinienanzahl();
+        Fehler = (4 - Fehler) / ( 4 );
 
         // Wenn Fehler größer als in BildInfoVector für aktuelles Bildobjekt gespeicherter Fehler dann Fehler aktualisieren
         if(Fehler > BildInfoVector[Bildlaufvariable].getFehler())
         {
-            BildInfoVector[Bildlaufvariable].setFehler(Fehler);// es wird jedes Mal überprüft ob aktueller Fehler größer ist als alle vorigen (nur dann wird er an Objekt übergeben)
-            //int blub34=0;
+            BildInfoVector[Bildlaufvariable].setFehler(Fehler);// es wird jedes Mal überprüft ob aktueller Fehler größer ist als alle vorigen (nur dann wird er an Objekt übergeben) (für jedes Set wird nur der kleinste Fehler gespeichert)
         }
-        float testx=BildInfoVector[Bildlaufvariable].getFehler();
-        //int blub=0;
+
     }
 
     // Fall 2: Gleiche Anzahl an Linien (==) (eigentlich egal welcher Fall) oder oder synthetisches Set größer als reales Set
@@ -106,28 +101,30 @@ void error_calc(){
             {
 
                 if(z==0){
-                Fehler= (Fehler + abs(reales_Set[x][z] - BildInfoVector[Bildlaufvariable].getLinieneintrag(combination[x],z) ) ) / 90;
+                    FehlerTheta = abs(reales_Set[x][z] - BildInfoVector[Bildlaufvariable].getLinieneintrag(combination[x],z) );
+                    Fehler = Fehler + (FehlerTheta/90);
                 }
 
                 if(z==1){
-                Fehler= (Fehler + abs(reales_Set[x][z] - BildInfoVector[Bildlaufvariable].getLinieneintrag(combination[x],z) ) ) / Rxi;
+                    FehlerXi= abs(reales_Set[x][z] - BildInfoVector[Bildlaufvariable].getLinieneintrag(combination[x],z) );
+                    Fehler = Fehler + (FehlerXi/Rxi);
                 }
 
                 if(z==2){
-                Fehler= (Fehler + abs(reales_Set[x][z] - BildInfoVector[Bildlaufvariable].getLinieneintrag(combination[x],z) ) ) / Reta;
+                    FehlerEta = abs(reales_Set[x][z] - BildInfoVector[Bildlaufvariable].getLinieneintrag(combination[x],z) );
+                    Fehler = Fehler + (FehlerEta/Reta);
                 }
 
                 if(z==3){
-                Fehler= (Fehler + abs(reales_Set[x][z] - BildInfoVector[Bildlaufvariable].getLinieneintrag(combination[x],z) ) ) / lmax;
+                    FehlerL = abs(reales_Set[x][z] - BildInfoVector[Bildlaufvariable].getLinieneintrag(combination[x],z) );
+                    Fehler = Fehler + (FehlerL/lmax);
                 }
-
-                //Fehler=Fehler + abs(reales_Set[x][z] - BildInfoVector[Bildlaufvariable].getLinieneintrag(combination[x],z) );//m=permutation[x] getLinieneintrag(m,z)
-                //int blub33=0;
             }
         }
 
-        // Mittelwert
-        Fehler=(4-Fehler)/( 4 * reales_Set.size() );
+        // Gütewert Grel berechnen (ab hier ist Fehler eigentlich die falsche Bezeichnung)
+        Fehler = Fehler / BildInfoVector[Bildlaufvariable].getLinienanzahl();
+        Fehler = (4 - Fehler) / ( 4 );
 
         if(Fehler > BildInfoVector[Bildlaufvariable].getFehler())
         {
@@ -285,23 +282,41 @@ int main ( int argc, char *argv[] )
     //    cout<< "Geringster durchschnittlicher Fehler (pro Linie) des dritten sets: "<<BildInfoVector[2].getFehler()<<endl;
 
     // Suchen des Objekts mit kleinstem Fehler
-    int SetMitKleinstemFehler = 0, relativerFehler = 0;
+    int SetMitBestemGuetewert = 0;
+    float relativerFehler = 0;
     for(int m = 0; m < BildInfoVector.size(); m++)
     {
         if(BildInfoVector[m].getFehler() > relativerFehler)
         {
             relativerFehler = BildInfoVector[m].getFehler();
-            SetMitKleinstemFehler = m;
+            float guetewert = BildInfoVector[m].getFehler();// kann auskommentiert werden
+            SetMitBestemGuetewert = m;
+            int blub33=0;
         }
     }
-    //float blub22 = BildInfoVector[SetMitKleinstemFehler].getFehler();
+    //float blub22 = BildInfoVector[SetMitBestemGuetewert].getFehler();
 
     // Ausgabe der Pose mit dem geringsten Fehler
-    cout << "Set mit geringster Pose ist Set Nummer: " << SetMitKleinstemFehler << std::endl;
-    cout << "Pose: " << endl << "x=" << BildInfoVector[SetMitKleinstemFehler].getPoseneintrag(0) << endl << "y=" << BildInfoVector[SetMitKleinstemFehler].getPoseneintrag(1) << endl;
-    cout << "z=" << BildInfoVector[SetMitKleinstemFehler].getPoseneintrag(2) << endl << "roll=" << BildInfoVector[SetMitKleinstemFehler].getPoseneintrag(3) << endl;
-    cout << "pitch=" << BildInfoVector[SetMitKleinstemFehler].getPoseneintrag(4) << endl << "yaw=" << BildInfoVector[SetMitKleinstemFehler].getPoseneintrag(5) << endl;
-    cout << "relativer Fehler = " << BildInfoVector[SetMitKleinstemFehler].getFehler() << endl;
+    cout << "Set (Pose) mit bestem Gütewert ist Set (Pose) Nummer: " << SetMitBestemGuetewert << std::endl;
+    cout << "Pose: " << endl << "x=" << BildInfoVector[SetMitBestemGuetewert].getPoseneintrag(0) << endl << "y=" << BildInfoVector[SetMitBestemGuetewert].getPoseneintrag(1) << endl;
+    cout << "z=" << BildInfoVector[SetMitBestemGuetewert].getPoseneintrag(2) << endl << "roll=" << BildInfoVector[SetMitBestemGuetewert].getPoseneintrag(3) << endl;
+    cout << "pitch=" << BildInfoVector[SetMitBestemGuetewert].getPoseneintrag(4) << endl << "yaw=" << BildInfoVector[SetMitBestemGuetewert].getPoseneintrag(5) << endl;
+    cout << "relativer Gütewert = " << BildInfoVector[SetMitBestemGuetewert].getFehler() << endl;
+
+
+    // Die 20 besten Posen ermitteln
+//    std::vector<double> test25;
+//    test25.push_back(3), test25.push_back(1.0), test25.push_back(0.01), test25.push_back(0.2), test25.push_back(0.002), test25.push_back(-1.0), test25.push_back(-20);
+    std::priority_queue<std::pair< float,int> > q;
+    for (int i = 0; i < BildInfoVector.size(); ++i) {
+        q.push(std::pair<float, int>(BildInfoVector[i].getFehler(), i));
+    }
+    int k = 2; // number of indices we need
+    for (int i = 0; i < k; ++i) {
+      int ki = q.top().second;
+      std::cout << "index[" << i << "] = " << ki << std::endl;
+      q.pop();
+    }
 
     return 0;
 }
