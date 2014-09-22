@@ -26,6 +26,17 @@ using namespace std;
 //typedef <vector<vector<double> > Vektordef;
 
 
+/////////////  Werte definieren  /////////////
+
+// Auflösung der Handkamerabilder (Pixel). Hier kann auch das Seitenverhältnis (bzw. senkrechter, waagerechter Kamerasensor) verändert werden
+int Rxi = 2048 , Reta = 1536 ;
+int lmax = sqrt( pow(Rxi,2) + pow(Reta,2) );
+int blub44 = 3;
+
+
+//////////////////////////////////////////////
+
+
 // In der Funktion error_calc wird der Fehler der aktuellen Kombination der synthetischen Linien mit den realen Linien berechnet
 void error_calc(){
     myTimer.restart();
@@ -35,6 +46,8 @@ void error_calc(){
 
     // Fall 1: synthetisches Set ist kleiner als reales Set:
     float Fehler=0;
+    int test33 = BildInfoVector[Bildlaufvariable].getLinienanzahl();
+    int test44 = reales_Set.size();
     //vector<float> Fehlervec;// Fehlervektor!! Fehler für jede Setkombination speichern, niedrigsten Wert an Objekt übergeben!
     if(BildInfoVector[Bildlaufvariable].getLinienanzahl() < reales_Set.size())//Stelle des Bildinfovectors muss fortlaufend sein (muss noch geändert werden)
     {
@@ -43,25 +56,39 @@ void error_calc(){
         {
             for(int z=0;z<4;z++) // Alle 4 Parameter durchlaufen
             {
-                //int test1=BildInfoVector[Bildlaufvariable].getLinieneintrag(x,z);
-                //int test2=reales_Set[permutation[x]][z];// permutation[5] gibt es z.B. gar nicht!!! FEHLER!!!!!!
-                // combination-Vektor und permutation-Vektor beide mit 0 anfangen lassen (damit ich mir das (-1) sparen kann!!!!
-                //int test3= BildInfoVector[Bildlaufvariable].getLinieneintrag(x,z)-reales_Set[permutation[x]][z];
-                //int test4= permutation[x];
-                Fehler = Fehler + abs(BildInfoVector[Bildlaufvariable].getLinieneintrag(x,z) - reales_Set[combination[x]][z]);
-                //int blub44=0;
+                // Wert für Theta: ΔΘi/90
+                if(z==0){
+                    Fehler = ( Fehler + abs(BildInfoVector[Bildlaufvariable].getLinieneintrag(x,z) - reales_Set[combination[x]][z]) ) / 90;
+                }
+
+                // Wert für mxi,i: Δmxi,i/Rxi
+                else if(z==1){
+                    Fehler = ( Fehler + abs(BildInfoVector[Bildlaufvariable].getLinieneintrag(x,z) - reales_Set[combination[x]][z]) ) / Rxi;
+                }
+
+                // Wert für Theta: Δmxi,i/Reta
+                else if(z==2){
+                    Fehler = ( Fehler + abs(BildInfoVector[Bildlaufvariable].getLinieneintrag(x,z) - reales_Set[combination[x]][z]) ) / Reta;
+                }
+
+                // Wert für Theta: Δl,i/lmax
+                else if(z==3){
+                    Fehler = ( Fehler + abs(BildInfoVector[Bildlaufvariable].getLinieneintrag(x,z) - reales_Set[combination[x]][z]) ) / lmax;
+                }
+
+                //Fehler = Fehler + abs(BildInfoVector[Bildlaufvariable].getLinieneintrag(x,z) - reales_Set[combination[x]][z]);
             }
         }
 
         // Mittelwert für Fehler dieser Kombination berechnen
-        Fehler=Fehler/BildInfoVector[Bildlaufvariable].getLinienanzahl();//Mittelwert für die aktuelle Kombination
+        Fehler=(4-Fehler) / ( 4 * BildInfoVector[Bildlaufvariable].getLinienanzahl() );//Mittelwert für die aktuelle Kombination
         //int blub22=BildInfoVector[Bildlaufvariable].getFehler();
         //int blub23=0;
 
-        // Wenn Fehler kleiner als in BildInfoVector für aktuelles Bildobjekt gespeicherter Fehler dann Fehler aktualisieren
-        if(Fehler < BildInfoVector[Bildlaufvariable].getFehler())
+        // Wenn Fehler größer als in BildInfoVector für aktuelles Bildobjekt gespeicherter Fehler dann Fehler aktualisieren
+        if(Fehler > BildInfoVector[Bildlaufvariable].getFehler())
         {
-            BildInfoVector[Bildlaufvariable].setFehler(Fehler);// es wird jedes Mal überprüft ob aktueller Fehler kleiner ist als alle vorigen (nur dann wird er an Objekt übergeben)
+            BildInfoVector[Bildlaufvariable].setFehler(Fehler);// es wird jedes Mal überprüft ob aktueller Fehler größer ist als alle vorigen (nur dann wird er an Objekt übergeben)
             //int blub34=0;
         }
         float testx=BildInfoVector[Bildlaufvariable].getFehler();
@@ -77,14 +104,32 @@ void error_calc(){
         {
             for(int z=0;z<4;z++) // Alle 4 Parameter durchlaufen
             {
-                Fehler=Fehler + abs(reales_Set[x][z] - BildInfoVector[Bildlaufvariable].getLinieneintrag(combination[x],z) );//m=permutation[x] getLinieneintrag(m,z)
+
+                if(z==0){
+                Fehler= (Fehler + abs(reales_Set[x][z] - BildInfoVector[Bildlaufvariable].getLinieneintrag(combination[x],z) ) ) / 90;
+                }
+
+                if(z==1){
+                Fehler= (Fehler + abs(reales_Set[x][z] - BildInfoVector[Bildlaufvariable].getLinieneintrag(combination[x],z) ) ) / Rxi;
+                }
+
+                if(z==2){
+                Fehler= (Fehler + abs(reales_Set[x][z] - BildInfoVector[Bildlaufvariable].getLinieneintrag(combination[x],z) ) ) / Reta;
+                }
+
+                if(z==3){
+                Fehler= (Fehler + abs(reales_Set[x][z] - BildInfoVector[Bildlaufvariable].getLinieneintrag(combination[x],z) ) ) / lmax;
+                }
+
+                //Fehler=Fehler + abs(reales_Set[x][z] - BildInfoVector[Bildlaufvariable].getLinieneintrag(combination[x],z) );//m=permutation[x] getLinieneintrag(m,z)
                 //int blub33=0;
             }
         }
 
         // Mittelwert
-        Fehler=Fehler/reales_Set.size();
-        if(Fehler < BildInfoVector[Bildlaufvariable].getFehler())
+        Fehler=(4-Fehler)/( 4 * reales_Set.size() );
+
+        if(Fehler > BildInfoVector[Bildlaufvariable].getFehler())
         {
             BildInfoVector[Bildlaufvariable].setFehler(Fehler);
         }
@@ -96,11 +141,11 @@ void error_calc(){
 void calc_all_combinations(int offset, int k) {
 
     if (k == 0) { //
-//        cout << "Kombination = [";
-//        for(int komb_len = 0; komb_len < combination.size(); komb_len++){
-//            cout << combination[komb_len] << " ";
-//        }
-//        cout << "]" << endl;
+        //        cout << "Kombination = [";
+        //        for(int komb_len = 0; komb_len < combination.size(); komb_len++){
+        //            cout << combination[komb_len] << " ";
+        //        }
+        //        cout << "]" << endl;
         error_calc();
         return;
     }
@@ -119,7 +164,7 @@ void calc_all_combinations(int offset, int k) {
 int main ( int argc, char *argv[] )
 {
     // Textdatei öffnen
-    QFile file("Eigenschaften.txt");
+    QFile file("TestLinesmatcher.txt");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
         return -1;
     QTextStream in(&file);
@@ -168,8 +213,8 @@ int main ( int argc, char *argv[] )
     file.close();
     float test=BildInfoVector[0].getPoseneintrag(0);
     cout<<"Poseneintrag[0]= "<< test << endl;
-    int test2=BildInfoVector[0].getLinieneintrag(3,2);
-    cout<<"Linieneintrag[3][2]= "<<test2<<endl;
+    //    int test2=BildInfoVector[0].getLinieneintrag(3,2);
+    //    cout<<"Linieneintrag[3][2]= "<<test2<<endl;
     cout<<"Linienanzahl= "<<BildInfoVector[0].getLinienanzahl();
     ///////////////
     //      1. k und n ermitteln
@@ -181,20 +226,21 @@ int main ( int argc, char *argv[] )
     ////////////
 
     // reales Linienset laden
-    for(int i = 0; i < 6; i++)// es werden 6 Zeilen reserviert
+    // EINSTELLEN, WIE VIELE ZEILEN RESERVIERT WERDEN MÜSSEN!!!!!!!!! (NACHDEM LINIEN AUS HANDYBILD EXTRAHIERT WURDEN)
+    for(int i = 0; i < 2; i++)// es werden 2 Zeilen reserviert
     {
         vector<int> row;
         reales_Set.push_back(row);
     }
-    reales_Set[0].push_back(100); reales_Set[0].push_back(300); reales_Set[0].push_back(25); reales_Set[0].push_back(200);
-    reales_Set[1].push_back(100); reales_Set[1].push_back(400); reales_Set[1].push_back(28); reales_Set[1].push_back(220);
-    reales_Set[2].push_back(200); reales_Set[2].push_back(300); reales_Set[2].push_back(90); reales_Set[2].push_back(50);
-    reales_Set[3].push_back(350); reales_Set[3].push_back(300); reales_Set[3].push_back(-15); reales_Set[3].push_back(230);
-    reales_Set[4].push_back(350); reales_Set[4].push_back(400); reales_Set[4].push_back(-20); reales_Set[4].push_back(240);
-    reales_Set[5].push_back(124); reales_Set[4].push_back(523); reales_Set[4].push_back(-23); reales_Set[4].push_back(856);
+    reales_Set[0].push_back(-10); reales_Set[0].push_back(300); reales_Set[0].push_back(200); reales_Set[0].push_back(200);
+    reales_Set[1].push_back(10); reales_Set[1].push_back(400); reales_Set[1].push_back(400); reales_Set[1].push_back(700);
+    //    reales_Set[2].push_back(50); reales_Set[2].push_back(300); reales_Set[2].push_back(90); reales_Set[2].push_back(50);
+    //    reales_Set[3].push_back(350); reales_Set[3].push_back(300); reales_Set[3].push_back(-15); reales_Set[3].push_back(230);
+    //    reales_Set[4].push_back(350); reales_Set[4].push_back(400); reales_Set[4].push_back(-20); reales_Set[4].push_back(240);
+    //    reales_Set[5].push_back(124); reales_Set[4].push_back(523); reales_Set[4].push_back(-23); reales_Set[4].push_back(856);
 
     // Größen des synthetischen Linienvektors und des reales_Set-Vektors vergleichen um n und k zu bestimmen
-    cout << "Starting Combinations ..";
+    cout << "Starting Combinations..." << endl;
     for (Bildlaufvariable=0; Bildlaufvariable<BildInfoVector.size();Bildlaufvariable++)
     {
         myTimer2.restart();
@@ -215,6 +261,7 @@ int main ( int argc, char *argv[] )
             n=reales_Set.size(); // beide gleich groß!
             k=reales_Set.size();
         }
+
         cout<<"k= "<<k<<endl;
         cout <<"n= "<<n<<endl;
 
@@ -238,21 +285,23 @@ int main ( int argc, char *argv[] )
     //    cout<< "Geringster durchschnittlicher Fehler (pro Linie) des dritten sets: "<<BildInfoVector[2].getFehler()<<endl;
 
     // Suchen des Objekts mit kleinstem Fehler
-    int SetMitKleinstemFehler = 0, relativerFehler = 1000;
-    for(int m = 0; m <= BildInfoVector.size(); m++)
+    int SetMitKleinstemFehler = 0, relativerFehler = 0;
+    for(int m = 0; m < BildInfoVector.size(); m++)
     {
-        if(BildInfoVector[m].getFehler() < relativerFehler)
+        if(BildInfoVector[m].getFehler() > relativerFehler)
         {
             relativerFehler = BildInfoVector[m].getFehler();
             SetMitKleinstemFehler = m;
         }
     }
+    //float blub22 = BildInfoVector[SetMitKleinstemFehler].getFehler();
 
     // Ausgabe der Pose mit dem geringsten Fehler
     cout << "Set mit geringster Pose ist Set Nummer: " << SetMitKleinstemFehler << std::endl;
     cout << "Pose: " << endl << "x=" << BildInfoVector[SetMitKleinstemFehler].getPoseneintrag(0) << endl << "y=" << BildInfoVector[SetMitKleinstemFehler].getPoseneintrag(1) << endl;
     cout << "z=" << BildInfoVector[SetMitKleinstemFehler].getPoseneintrag(2) << endl << "roll=" << BildInfoVector[SetMitKleinstemFehler].getPoseneintrag(3) << endl;
     cout << "pitch=" << BildInfoVector[SetMitKleinstemFehler].getPoseneintrag(4) << endl << "yaw=" << BildInfoVector[SetMitKleinstemFehler].getPoseneintrag(5) << endl;
+    cout << "relativer Fehler = " << BildInfoVector[SetMitKleinstemFehler].getFehler() << endl;
 
     return 0;
 }
