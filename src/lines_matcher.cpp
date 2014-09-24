@@ -257,7 +257,7 @@ int main ( int argc, char *argv[] )
     reales_Set[7].push_back(18); reales_Set[7].push_back(339); reales_Set[7].push_back(1112); reales_Set[7].push_back(713);
     reales_Set[8].push_back(79); reales_Set[8].push_back(1907); reales_Set[8].push_back(940); reales_Set[8].push_back(233);
     reales_Set[9].push_back(79); reales_Set[9].push_back(1867); reales_Set[9].push_back(944); reales_Set[9].push_back(222);
-    reales_Set[10].push_back(89); reales_Set10[].push_back(1066); reales_Set[10].push_back(774); reales_Set[10].push_back(194);
+    reales_Set[10].push_back(89); reales_Set[10].push_back(1066); reales_Set[10].push_back(774); reales_Set[10].push_back(194);
     reales_Set[11].push_back(89); reales_Set[11].push_back(2045); reales_Set[11].push_back(1221); reales_Set[11].push_back(216);
 
 
