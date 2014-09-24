@@ -45,6 +45,9 @@ int lmax = sqrt( pow(Rxi,2) + pow(Reta,2) );
 void error_calc(){
     //myTimer.restart();
 
+    // Es sollen nur Sets mit mindestens 4 Linien betrachtet werden, sonst ist Güte 0
+    if(BildInfoVector[Bildlaufvariable].getLinienanzahl() > 3){
+
     float Fehler = 0, FehlerTheta=0, FehlerXi=0, FehlerEta=0, FehlerL=0;
 
     // Fall 1: synthetisches Set ist kleiner als reales Set:
@@ -147,6 +150,7 @@ void error_calc(){
     }
 
 }
+}
 
 // In dieser Funktion werden nacheinander alle Kombinationen für k Zahlen aus dem Vektor "people" (in dem die Zahlen 0 bis n-1 sind) berechnet
 void calc_all_combinations(int offset, int k) {
@@ -157,6 +161,7 @@ void calc_all_combinations(int offset, int k) {
         //            cout << combination[komb_len] << " ";
         //        }
         //        cout << "]" << endl;
+
         error_calc();
         return;
     }
@@ -321,7 +326,7 @@ int main ( int argc, char *argv[] )
     for (int i = 0; i < BildInfoVector.size(); ++i) {
         q.push(std::pair<float, int>(BildInfoVector[i].getFehler(), i));
     }
-    int k = BildInfoVector.size(); // number of indices we need
+    int k = 20; // number of indices we need
     for (int i = 0; i < k; ++i) {
       int ki = q.top().second;
       q.pop();
