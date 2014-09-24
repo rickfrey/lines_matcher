@@ -58,6 +58,12 @@ void error_calc(){
                 // Wert für Theta: ΔΘi/90
                 if(z==0){
                     FehlerTheta = abs(BildInfoVector[Bildlaufvariable].getLinieneintrag(x,z) - reales_Set[combination[x]][z]);
+
+                    // Wenn Winkeldifferenz größer als 90°
+                    if(FehlerTheta > 90){
+                        FehlerTheta = 180 - FehlerTheta;
+                    }
+
                     Fehler = Fehler + (FehlerTheta/90);
                 }
 
@@ -104,6 +110,12 @@ void error_calc(){
 
                 if(z==0){
                     FehlerTheta = abs(reales_Set[x][z] - BildInfoVector[Bildlaufvariable].getLinieneintrag(combination[x],z) );
+
+                    // Wenn Winkeldifferenz größer als 90°
+                    if(FehlerTheta > 90){
+                        FehlerTheta = 180 - FehlerTheta;
+                    }
+
                     Fehler = Fehler + (FehlerTheta/90);
                 }
 
