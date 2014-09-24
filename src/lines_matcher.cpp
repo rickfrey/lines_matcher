@@ -178,7 +178,7 @@ int main ( int argc, char *argv[] )
     Fehlerberechnungszeit.start();
 
     // Textdatei öffnen
-    QFile file("TestLinesmatcher.txt");
+    QFile file("Arena_19_09_gute_Parameter.txt");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
         return -1;
     QTextStream in(&file);
@@ -241,13 +241,29 @@ int main ( int argc, char *argv[] )
 
     // reales Linienset laden
     // EINSTELLEN, WIE VIELE ZEILEN RESERVIERT WERDEN MÜSSEN!!!!!!!!! (NACHDEM LINIEN AUS HANDYBILD EXTRAHIERT WURDEN)
-    for(int i = 0; i < 2; i++)// es werden 2 Zeilen reserviert
+    for(int i = 0; i < 12; i++)// es werden 2 Zeilen reserviert
     {
         vector<int> row;
         reales_Set.push_back(row);
     }
-    reales_Set[0].push_back(-10); reales_Set[0].push_back(300); reales_Set[0].push_back(200); reales_Set[0].push_back(200);
-    reales_Set[1].push_back(10); reales_Set[1].push_back(400); reales_Set[1].push_back(400); reales_Set[1].push_back(700);
+
+    reales_Set[0].push_back(-60); reales_Set[0].push_back(1950); reales_Set[0].push_back(1169); reales_Set[0].push_back(375);
+    reales_Set[1].push_back(-54); reales_Set[1].push_back(1992); reales_Set[1].push_back(898); reales_Set[1].push_back(185);
+    reales_Set[2].push_back(-13); reales_Set[2].push_back(1477); reales_Set[2].push_back(971); reales_Set[2].push_back(852);
+    reales_Set[3].push_back(-11); reales_Set[3].push_back(1512); reales_Set[3].push_back(759); reales_Set[3].push_back(896);
+    reales_Set[4].push_back(-11); reales_Set[4].push_back(1634); reales_Set[4].push_back(783); reales_Set[4].push_back(510);
+    reales_Set[5].push_back(15); reales_Set[5].push_back(531); reales_Set[5].push_back(819); reales_Set[5].push_back(1102);
+    reales_Set[6].push_back(18); reales_Set[6].push_back(572); reales_Set[6].push_back(1036); reales_Set[6].push_back(1048);
+    reales_Set[7].push_back(18); reales_Set[7].push_back(339); reales_Set[7].push_back(1112); reales_Set[7].push_back(713);
+    reales_Set[8].push_back(79); reales_Set[8].push_back(1907); reales_Set[8].push_back(940); reales_Set[8].push_back(233);
+    reales_Set[9].push_back(79); reales_Set[9].push_back(1867); reales_Set[9].push_back(944); reales_Set[9].push_back(222);
+    reales_Set[10].push_back(89); reales_Set10[].push_back(1066); reales_Set[10].push_back(774); reales_Set[10].push_back(194);
+    reales_Set[11].push_back(89); reales_Set[11].push_back(2045); reales_Set[11].push_back(1221); reales_Set[11].push_back(216);
+
+
+//    reales_Set[0].push_back(-10); reales_Set[0].push_back(300); reales_Set[0].push_back(200); reales_Set[0].push_back(200);
+//    reales_Set[1].push_back(10); reales_Set[1].push_back(400); reales_Set[1].push_back(400); reales_Set[1].push_back(700);
+
     //    reales_Set[2].push_back(50); reales_Set[2].push_back(300); reales_Set[2].push_back(90); reales_Set[2].push_back(50);
     //    reales_Set[3].push_back(350); reales_Set[3].push_back(300); reales_Set[3].push_back(-15); reales_Set[3].push_back(230);
     //    reales_Set[4].push_back(350); reales_Set[4].push_back(400); reales_Set[4].push_back(-20); reales_Set[4].push_back(240);
@@ -298,7 +314,7 @@ int main ( int argc, char *argv[] )
     cout << endl << "Laufzeit für die Berechnung der Gütewerte: " << Fehlerberechnungszeit.elapsed() << " ms" << endl;
 
     // Starten des Timers für die Suche der besten Posen
-    Fehlerberechnungszeit.start();
+    Suchzeit.start();
 
     // Die k besten Posen ermitteln und ausgeben
     std::priority_queue<std::pair< float,int> > q;
@@ -321,7 +337,7 @@ int main ( int argc, char *argv[] )
 
 
     // Stoppen des Timers für die Suche der besten Posen
-    cout << "Gesamte Laufzeit: " << Fehlerberechnungszeit.elapsed() << " ms" << endl;
+    cout << "Zeit für Suche nach besten Gütewerten: " << Suchzeit.elapsed() << " ms" << endl;
 
 
     return 0;
