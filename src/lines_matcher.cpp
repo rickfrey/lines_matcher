@@ -252,18 +252,18 @@ int main ( int argc, char *argv[] )
         reales_Set.push_back(row);
     }
 
-    reales_Set[0].push_back(-60); reales_Set[0].push_back(1950); reales_Set[0].push_back(1169); reales_Set[0].push_back(375);
-    reales_Set[1].push_back(-54); reales_Set[1].push_back(1992); reales_Set[1].push_back(898); reales_Set[1].push_back(185);
-    reales_Set[2].push_back(-13); reales_Set[2].push_back(1477); reales_Set[2].push_back(971); reales_Set[2].push_back(852);
-    reales_Set[3].push_back(-11); reales_Set[3].push_back(1512); reales_Set[3].push_back(759); reales_Set[3].push_back(896);
-    reales_Set[4].push_back(-11); reales_Set[4].push_back(1634); reales_Set[4].push_back(783); reales_Set[4].push_back(510);
-    reales_Set[5].push_back(15); reales_Set[5].push_back(531); reales_Set[5].push_back(819); reales_Set[5].push_back(1102);
-    reales_Set[6].push_back(18); reales_Set[6].push_back(572); reales_Set[6].push_back(1036); reales_Set[6].push_back(1048);
-    reales_Set[7].push_back(18); reales_Set[7].push_back(339); reales_Set[7].push_back(1112); reales_Set[7].push_back(713);
-    reales_Set[8].push_back(79); reales_Set[8].push_back(1907); reales_Set[8].push_back(940); reales_Set[8].push_back(233);
-    reales_Set[9].push_back(79); reales_Set[9].push_back(1867); reales_Set[9].push_back(944); reales_Set[9].push_back(222);
-    reales_Set[10].push_back(89); reales_Set[10].push_back(1066); reales_Set[10].push_back(774); reales_Set[10].push_back(194);
-    reales_Set[11].push_back(89); reales_Set[11].push_back(2045); reales_Set[11].push_back(1221); reales_Set[11].push_back(216);
+    reales_Set[0].push_back(-83); reales_Set[0].push_back(552); reales_Set[0].push_back(421); reales_Set[0].push_back(159);
+    reales_Set[1].push_back(-19); reales_Set[1].push_back(1570); reales_Set[1].push_back(581); reales_Set[1].push_back(1003);
+    reales_Set[2].push_back(-19); reales_Set[2].push_back(1340); reales_Set[2].push_back(504); reales_Set[2].push_back(496);
+    reales_Set[3].push_back(-16); reales_Set[3].push_back(1579); reales_Set[3].push_back(396); reales_Set[3].push_back(970);
+    reales_Set[4].push_back(7); reales_Set[4].push_back(841); reales_Set[4].push_back(304); reales_Set[4].push_back(596);
+    reales_Set[5].push_back(8); reales_Set[5].push_back(841); reales_Set[5].push_back(468); reales_Set[5].push_back(563);
+    reales_Set[6].push_back(39); reales_Set[6].push_back(274); reales_Set[6].push_back(563); reales_Set[6].push_back(710);
+    reales_Set[7].push_back(39); reales_Set[7].push_back(461); reales_Set[7].push_back(411); reales_Set[7].push_back(195);
+    reales_Set[8].push_back(39); reales_Set[8].push_back(117); reales_Set[8].push_back(693); reales_Set[8].push_back(301);
+    reales_Set[9].push_back(45); reales_Set[9].push_back(283); reales_Set[9].push_back(790); reales_Set[9].push_back(804);
+    reales_Set[10].push_back(89); reales_Set[10].push_back(1103); reales_Set[10].push_back(345); reales_Set[10].push_back(152);
+    reales_Set[11].push_back(90); reales_Set[11].push_back(1095); reales_Set[11].push_back(354); reales_Set[11].push_back(151);
 
 
 //    reales_Set[0].push_back(-10); reales_Set[0].push_back(300); reales_Set[0].push_back(200); reales_Set[0].push_back(200);
@@ -343,6 +343,8 @@ int main ( int argc, char *argv[] )
 
     // Stoppen des Timers für die Suche der besten Posen
     cout << "Zeit für Suche nach besten Gütewerten: " << Suchzeit.elapsed() << " ms" << endl;
+
+    cout << "Anzahl Posen: " << BildInfoVector.size() << endl;
 
 
     return 0;
