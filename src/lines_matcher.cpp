@@ -246,33 +246,51 @@ int main ( int argc, char *argv[] )
 
     // reales Linienset laden
     // EINSTELLEN, WIE VIELE ZEILEN RESERVIERT WERDEN MÜSSEN!!!!!!!!! (NACHDEM LINIEN AUS HANDYBILD EXTRAHIERT WURDEN)
-    for(int i = 0; i < 12; i++)// es werden 2 Zeilen reserviert
+    for(int i = 0; i < 12; i++)
     {
         vector<int> row;
         reales_Set.push_back(row);
     }
 
-    reales_Set[0].push_back(-83); reales_Set[0].push_back(552); reales_Set[0].push_back(421); reales_Set[0].push_back(159);
-    reales_Set[1].push_back(-19); reales_Set[1].push_back(1570); reales_Set[1].push_back(581); reales_Set[1].push_back(1003);
-    reales_Set[2].push_back(-19); reales_Set[2].push_back(1340); reales_Set[2].push_back(504); reales_Set[2].push_back(496);
-    reales_Set[3].push_back(-16); reales_Set[3].push_back(1579); reales_Set[3].push_back(396); reales_Set[3].push_back(970);
-    reales_Set[4].push_back(7); reales_Set[4].push_back(841); reales_Set[4].push_back(304); reales_Set[4].push_back(596);
-    reales_Set[5].push_back(8); reales_Set[5].push_back(841); reales_Set[5].push_back(468); reales_Set[5].push_back(563);
-    reales_Set[6].push_back(39); reales_Set[6].push_back(274); reales_Set[6].push_back(563); reales_Set[6].push_back(710);
-    reales_Set[7].push_back(39); reales_Set[7].push_back(461); reales_Set[7].push_back(411); reales_Set[7].push_back(195);
-    reales_Set[8].push_back(39); reales_Set[8].push_back(117); reales_Set[8].push_back(693); reales_Set[8].push_back(301);
-    reales_Set[9].push_back(45); reales_Set[9].push_back(283); reales_Set[9].push_back(790); reales_Set[9].push_back(804);
-    reales_Set[10].push_back(89); reales_Set[10].push_back(1103); reales_Set[10].push_back(345); reales_Set[10].push_back(152);
-    reales_Set[11].push_back(90); reales_Set[11].push_back(1095); reales_Set[11].push_back(354); reales_Set[11].push_back(151);
+    // Pose A1
+    reales_Set[0].push_back(-60); reales_Set[0].push_back(1950); reales_Set[0].push_back(1169); reales_Set[0].push_back(375);
+    reales_Set[1].push_back(-54); reales_Set[1].push_back(1992); reales_Set[1].push_back(898); reales_Set[1].push_back(185);
+    reales_Set[2].push_back(-13); reales_Set[2].push_back(1477); reales_Set[2].push_back(971); reales_Set[2].push_back(852);
+    reales_Set[3].push_back(-11); reales_Set[3].push_back(1512); reales_Set[3].push_back(759); reales_Set[3].push_back(896);
+    reales_Set[4].push_back(-11); reales_Set[4].push_back(1634); reales_Set[4].push_back(783); reales_Set[4].push_back(510);
+    reales_Set[5].push_back(15); reales_Set[5].push_back(531); reales_Set[5].push_back(819); reales_Set[5].push_back(1102);
+    reales_Set[6].push_back(18); reales_Set[6].push_back(572); reales_Set[6].push_back(1036); reales_Set[6].push_back(1048);
+    reales_Set[7].push_back(18); reales_Set[7].push_back(339); reales_Set[7].push_back(1112); reales_Set[7].push_back(713);
+    reales_Set[8].push_back(79); reales_Set[8].push_back(1907); reales_Set[8].push_back(940); reales_Set[8].push_back(233);
+    reales_Set[9].push_back(79); reales_Set[9].push_back(1867); reales_Set[9].push_back(944); reales_Set[9].push_back(222);
+    reales_Set[10].push_back(89); reales_Set[10].push_back(1066); reales_Set[10].push_back(774); reales_Set[10].push_back(194);
+    reales_Set[11].push_back(89); reales_Set[11].push_back(2045); reales_Set[11].push_back(1221); reales_Set[11].push_back(216);
+
+    // Pose A2
+//    reales_Set[0].push_back(-88); reales_Set[0].push_back(858); reales_Set[0].push_back(696); reales_Set[0].push_back(143);
+//    reales_Set[1].push_back(-88); reales_Set[1].push_back(856); reales_Set[1].push_back(645); reales_Set[1].push_back(129);
+//    reales_Set[2].push_back(-9); reales_Set[2].push_back(1454); reales_Set[2].push_back(861); reales_Set[2].push_back(1199);
+//    reales_Set[3].push_back(-7); reales_Set[3].push_back(1445); reales_Set[3].push_back(655); reales_Set[3].push_back(1205);
+//    reales_Set[4].push_back(46); reales_Set[4].push_back(443); reales_Set[4].push_back(998); reales_Set[4].push_back(1166);
+//    reales_Set[5].push_back(46); reales_Set[5].push_back(381); reales_Set[5].push_back(1062); reales_Set[5].push_back(1107);
+//    reales_Set[6].push_back(52); reales_Set[6].push_back(540); reales_Set[6].push_back(1178); reales_Set[6].push_back(904);
+//    reales_Set[7].push_back(52); reales_Set[7].push_back(798); reales_Set[7].push_back(845); reales_Set[7].push_back(201);
+
+    // Pose C1
+//    reales_Set[0].push_back(-83); reales_Set[0].push_back(552); reales_Set[0].push_back(421); reales_Set[0].push_back(159);
+//    reales_Set[1].push_back(-19); reales_Set[1].push_back(1570); reales_Set[1].push_back(581); reales_Set[1].push_back(1003);
+//    reales_Set[2].push_back(-19); reales_Set[2].push_back(1340); reales_Set[2].push_back(504); reales_Set[2].push_back(496);
+//    reales_Set[3].push_back(-16); reales_Set[3].push_back(1579); reales_Set[3].push_back(396); reales_Set[3].push_back(970);
+//    reales_Set[4].push_back(7); reales_Set[4].push_back(841); reales_Set[4].push_back(304); reales_Set[4].push_back(596);
+//    reales_Set[5].push_back(8); reales_Set[5].push_back(841); reales_Set[5].push_back(468); reales_Set[5].push_back(563);
+//    reales_Set[6].push_back(39); reales_Set[6].push_back(274); reales_Set[6].push_back(563); reales_Set[6].push_back(710);
+//    reales_Set[7].push_back(39); reales_Set[7].push_back(461); reales_Set[7].push_back(411); reales_Set[7].push_back(195);
+//    reales_Set[8].push_back(39); reales_Set[8].push_back(117); reales_Set[8].push_back(693); reales_Set[8].push_back(301);
+//    reales_Set[9].push_back(45); reales_Set[9].push_back(283); reales_Set[9].push_back(790); reales_Set[9].push_back(804);
+//    reales_Set[10].push_back(89); reales_Set[10].push_back(1103); reales_Set[10].push_back(345); reales_Set[10].push_back(152);
+//    reales_Set[11].push_back(90); reales_Set[11].push_back(1095); reales_Set[11].push_back(354); reales_Set[11].push_back(151);
 
 
-//    reales_Set[0].push_back(-10); reales_Set[0].push_back(300); reales_Set[0].push_back(200); reales_Set[0].push_back(200);
-//    reales_Set[1].push_back(10); reales_Set[1].push_back(400); reales_Set[1].push_back(400); reales_Set[1].push_back(700);
-
-    //    reales_Set[2].push_back(50); reales_Set[2].push_back(300); reales_Set[2].push_back(90); reales_Set[2].push_back(50);
-    //    reales_Set[3].push_back(350); reales_Set[3].push_back(300); reales_Set[3].push_back(-15); reales_Set[3].push_back(230);
-    //    reales_Set[4].push_back(350); reales_Set[4].push_back(400); reales_Set[4].push_back(-20); reales_Set[4].push_back(240);
-    //    reales_Set[5].push_back(124); reales_Set[4].push_back(523); reales_Set[4].push_back(-23); reales_Set[4].push_back(856);
 
     // Größen des synthetischen Linienvektors und des reales_Set-Vektors vergleichen um n und k zu bestimmen
     cout << "Starting Combinations..." << endl;
